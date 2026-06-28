@@ -2,11 +2,11 @@ export default function Authentication() {
   return (
     <div className="w-full h-screen">
       <header className="w-full h-20 flex items-start justify-start p-5">
-        <p className="text-2xl">Zenith</p>
+        <p className="text-2xl">Syncro</p>
       </header>
       <main className="w-full">
         <div className="flex items-center justify-center w-full h-full">
-          <div className="flex flex-col items-center justify-center w-full h-full dark:bg-neutral-900 bg-neutral-50">
+          <div className="flex flex-col items-center justify-center w-full h-full dark:bg-slate-900 bg-neutral-50">
             <p>Login</p>
             <form>
               <input type="text" placeholder="Digite seu email" />

@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Productivity website",
+  title: "Syncro",
   description: "This website was inspired by Jira, Miro, and ClickUp.",
 };
 

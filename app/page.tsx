@@ -1,9 +1,7 @@
-import Authentication from "./auth/login/page";
+import Authentication from "./(auth)/login/page";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-neutral-950">
-      <Authentication />
-    </div>
+    <div className="flex flex-col flex-1 items-center justify-center bg-[--background] font-sans"></div>
   );
 }
