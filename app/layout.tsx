@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-br" className={`${inter.variable} h-full antialiased`}>
+    <html lang="pt-br" className={`${inter.variable} h-full antialiased dark`}>
       <body className="h-full">
         <Header />
         <SideBar />
