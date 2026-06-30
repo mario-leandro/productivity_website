@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/src/components/Header";
-import SideBar from "@/src/components/SideBar";
+import AppLayout from "./AppLayout";
+import { Providers } from "./providers";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -20,11 +20,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-br" className={`${inter.variable} h-full antialiased dark`}>
+    <html lang="pt-br" className={`${inter.variable} h-full antialiased`}>
       <body className="h-full">
-        <Header />
-        <SideBar />
-        {children}
+        <Providers>
+          <AppLayout>{children}</AppLayout>
+        </Providers>
       </body>
     </html>
   );

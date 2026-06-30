@@ -7,10 +7,16 @@ import {
   Settings,
   SquareCheckBig,
   User,
+  X,
 } from "lucide-react";
 import { useState } from "react";
 
-export default function SideBar() {
+interface SideBarProps {
+  setSidebarOpen: (open: boolean) => void;
+  sidebarOpen: boolean;
+}
+
+export default function SideBar({ setSidebarOpen, sidebarOpen }: SideBarProps) {
   const [activePage, setActivePage] = useState("Dashboard");
 
   const arrNavItems = [
@@ -21,8 +27,47 @@ export default function SideBar() {
   ];
 
   return (
-    <div className="w-64 h-[calc(100%-80px)] flex flex-col justify-between border-r border-[var(--surface)] p-4">
+    <div
+      className={`
+        fixed
+        top-0
+        left-0
+        z-50
+
+        flex flex-col justify-between
+
+        w-64
+        h-[calc(100%-80px)]
+
+        border-r
+        border-[var(--surface)]
+
+        bg-[var(--background)]
+
+        p-4
+
+        transition-transform
+        duration-300
+
+        ${
+          sidebarOpen
+            ? "translate-x-0"
+            : "-translate-x-full"
+        }
+
+        md:translate-x-0
+        md:static
+      `}
+    >
       <div className="flex flex-col gap-1.5">
+        <div className="flex justify-end ml-4 mt-4 mb-8 md:hidden">
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+        >
+          <X />
+        </button>
+      </div>
+
         {arrNavItems.map((item) => (
           <button
             key={item.title}
@@ -43,7 +88,17 @@ export default function SideBar() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <button className="flex flex-row gap-2 p-1.5 rounded-xl transition-colors text-[var(--text)] hover:bg-[var(--surface)] hover:text-[var(--text)]">
+        <button
+          onClick={() => setActivePage("Configurações")}
+          className={`
+            flex gap-2 p-1.5 rounded-xl transition-colors
+            ${
+              activePage === "Configurações"
+                ? "bg-[var(--primary)] text-white"
+                : "text-[var(--text-secundary)] hover:bg-[var(--surface)] hover:text-[var(--text)]"
+            }
+          `}
+        >
           <Settings />
           Configurações
         </button>
