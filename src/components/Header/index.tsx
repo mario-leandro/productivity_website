@@ -1,5 +1,7 @@
-import { useTheme } from "next-themes";
 import { Bell, Sun, Menu, Moon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
+
 
 interface HeaderProps {
   setSidebarOpen: (open: boolean) => void;
@@ -7,7 +9,16 @@ interface HeaderProps {
 }
 
 export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
+  const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className="w-full h-20 flex flex-row justify-between items-center border-b border-[var(--surface)] px-6">
