@@ -11,9 +11,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <>
       <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-      <SideBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <div className="w-full h-[calc(100%-80px)] flex flex-row">
+        <SideBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-      <main>{children}</main>
+        <div className="flex-1">
+          <main>{children}</main>
+        </div>
+      </div>
     </>
   );
 }

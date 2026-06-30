@@ -37,7 +37,7 @@ export default function SideBar({ setSidebarOpen, sidebarOpen }: SideBarProps) {
         flex flex-col justify-between
 
         w-64
-        h-[calc(100%-80px)]
+        h-full
 
         border-r
         border-[var(--surface)]
