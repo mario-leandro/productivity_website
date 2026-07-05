@@ -5,12 +5,14 @@
   --secundary: #7c3aed;
   --surface: #efefef;
   --background: #f8fafc;
+  --surface-two: #444444;
   --text: #000;
 }
 
 .dark {
   --primary: #6366f1;
   --surface: #1e293b;
+  --surface-two: #334155;
   --background: #0f172a;
   --text: #fff;
   --text-secundary: #94a3b8;
