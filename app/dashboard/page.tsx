@@ -1,14 +1,24 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/src/components/ui/Card";
-import { ChevronRight, Flame, Plus, Search, Sparkles, Target } from "lucide-react";
+import { ChevronRight, Flame, Plus, Search, Sparkles, Target, TrendingUp } from "lucide-react";
 import Link from "next/link";
 
 export default function Dashboard() {
+
+  const now = new Date();
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  };
+  const formattedDate = now.toLocaleDateString('pt-BR', options);
+
   return (
     <div className="w-full h-full flex flex-col p-6 gap-4">
       <div className="w-full flex flex-row justify-between items-center gap-3">
         <div className="flex flex-col">
           <h1 className="text-2xl font-bold">Olá, Usuario</h1>
-          <p className="text-sm text-[var(--text-secundary)]">Terça-feira, 30 de Junho de 2026 • Seu dia está excelente. Você completou 1 de 5 tarefas!</p>
+          <p className="text-sm text-[var(--text-secundary)]">{formattedDate} • Seu dia está excelente. Você completou 1 de 5 tarefas!</p>
         </div>
 
         <div className="flex flex-row items-center gap-3">
@@ -29,7 +39,7 @@ export default function Dashboard() {
       </div>
 
       <div className="w-full flex flex-row gap-4">
-        <Card className="w-64">
+        <Card className="w-1/4">
           <CardHeader className="flex flex-row justify-between items-center mb-3">
             <p className="text-xs text-[var(--text-secundary)] uppercase font-semibold">Resumo do Dia</p>
             <div className="bg-[var(--surface-two)] p-1 rounded-lg">
@@ -59,7 +69,7 @@ export default function Dashboard() {
           </CardFooter>
         </Card>
 
-        <Card className="w-64">
+        <Card className="w-1/4">
           <CardHeader className="flex flex-row justify-between items-center mb-3">
             <p className="text-xs text-[var(--text-secundary)] uppercase font-semibold">Meta de Tarefas</p>
             <div className="bg-[var(--surface-two)] p-1 rounded-lg">
@@ -81,7 +91,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="w-64">
+        <Card className="w-1/4">
           <CardHeader className="flex flex-row justify-between items-center mb-3">
             <p className="text-xs text-[var(--text-secundary)] uppercase font-semibold">Foco (Pomodoro)</p>
             <div className="bg-[var(--surface-two)] p-1 rounded-lg">
@@ -91,42 +101,31 @@ export default function Dashboard() {
           <CardContent className="flex flex-row justify-between items-center">
             <div className="text-left">
               <span className="text-[var(--text)] font-bold text-2xl">45:00</span>
-              <p className="text-xs text-[var(--text-secundary)]">Hoje: 90min de foco total</p>
+              <p className="text-xs text-[var(--text-secundary)] mt-2">Hoje: 90min de foco total</p>
             </div>
             <div className="flex flex-col items-center justify-center">
-              <button className="p-2 rounded-xl text-xs font-bold text-white bg-orange-500">Focar</button>
+              <button className="px-3 py-2 rounded-xl text-xs font-bold text-white bg-orange-500">Focar</button>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="w-64">
+        <Card className="w-1/4">
           <CardHeader className="flex flex-row justify-between items-center mb-3">
-            <p className="text-xs text-[var(--text-secundary)] uppercase font-semibold">Resumo do Dia</p>
+            <p className="text-xs text-[var(--text-secundary)] uppercase font-semibold">Score Semanal</p>
             <div className="bg-[var(--surface-two)] p-1 rounded-lg">
-              <Sparkles size={15} className="text-[var(--primary)]" />
+              <TrendingUp size={15} className="text-purple-500" />
             </div>
           </CardHeader>
           <CardContent className="flex flex-col gap-2">
-            <div className="flex flex-row justify-between items-center">
-              <p className="text-xs text-[var(--text-secundary)]">Eventos Hoje</p>
-              <span className="text-xs font-bold text-[var(--primary)]">4</span>
+            <div className="flex flex-row items-center gap-1">
+              <p className="text-2xl font-bold">4.8/5.0</p>
+              <span className="text-xs text-green-500">+12%</span>
             </div>
-            <div className="flex flex-row justify-between items-center">
-              <p className="text-xs text-[var(--text-secundary)]">Tarefas Pendentes</p>
-              <span className="text-xs font-bold text-orange-400">4</span>
-            </div>
-            <div className="flex flex-row justify-between items-center">
-              <p className="text-xs text-[var(--text-secundary)]">Notas Recentes</p>
-              <span className="text-xs font-semibold text-violet-600">4</span>
-            </div>
+
+            <p className="text-xs text-[var(--text-secundary)]">
+              Parabéns! Sua média está ótima.
+            </p>
           </CardContent>
-          <hr className="border-[var(--surface-two)] my-3" />
-          <CardFooter className="">
-            <Link href={"/tarefas"} className="w-full flex flex-row justify-between items-center gap-1.5 text-[var(--primary)] text-xs font-semibold">
-              Ver pendências
-              <ChevronRight size={15} />
-            </Link>
-          </CardFooter>
         </Card>
       </div>
     </div>
