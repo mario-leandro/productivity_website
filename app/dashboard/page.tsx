@@ -1,16 +1,10 @@
 import CategoryProgress from "@/src/components/charts/CategoryChart";
 import WeeklyProductivityChart from "@/src/components/charts/WeeklyProductivityChart";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/src/components/ui/Card";
-import { BarChart, ChevronRight, Flame, Plus, Search, Sparkles, Target, TrendingUp } from "lucide-react";
+import { Card, CardContent, CardFooter, CardHeader } from "@/src/components/ui/Card";
+import { ChevronRight, Flame, Plus, Search, Sparkles, Target, TrendingUp } from "lucide-react";
 import Link from "next/link";
-import {
-  LineChart,
-  Line,
-  ResponsiveContainer
-} from "recharts";
 
 export default function Dashboard() {
-
   const now = new Date();
   const options: Intl.DateTimeFormatOptions = {
     weekday: 'long',
