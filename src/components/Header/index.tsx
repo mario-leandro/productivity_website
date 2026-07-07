@@ -2,7 +2,6 @@ import { Bell, Sun, Menu, Moon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 
-
 interface HeaderProps {
   setSidebarOpen: (open: boolean) => void;
   sidebarOpen: boolean;
@@ -44,7 +43,11 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           className="bg-[var(--surface)] hover:bg-slate-700 p-3 rounded-xl cursor-pointer transition-colors duration-200"
         >
-          {theme === "dark" ? <Moon size={15} /> : <Sun className="text-yellow-500" size={15} />}
+          {theme === "dark" ? (
+            <Moon size={15} />
+          ) : (
+            <Sun className="text-yellow-500" size={15} />
+          )}
         </button>
       </div>
     </div>

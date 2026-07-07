@@ -32,7 +32,6 @@ export default function SideBar({ setSidebarOpen, sidebarOpen }: SideBarProps) {
         fixed
         top-0
         left-0
-        z-50
 
         flex flex-col justify-between
 
@@ -49,11 +48,7 @@ export default function SideBar({ setSidebarOpen, sidebarOpen }: SideBarProps) {
         transition-transform
         duration-300
 
-        ${
-          sidebarOpen
-            ? "translate-x-0"
-            : "-translate-x-full"
-        }
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
 
         md:translate-x-0
         md:static
@@ -61,12 +56,10 @@ export default function SideBar({ setSidebarOpen, sidebarOpen }: SideBarProps) {
     >
       <div className="flex flex-col gap-1.5">
         <div className="flex justify-end ml-4 mt-4 mb-8 md:hidden">
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-        >
-          <X />
-        </button>
-      </div>
+          <button onClick={() => setSidebarOpen(!sidebarOpen)}>
+            <X />
+          </button>
+        </div>
 
         {arrNavItems.map((item) => (
           <button
