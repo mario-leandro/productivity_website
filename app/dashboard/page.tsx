@@ -1,6 +1,13 @@
+import CategoryProgress from "@/src/components/charts/CategoryChart";
+import WeeklyProductivityChart from "@/src/components/charts/WeeklyProductivityChart";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/src/components/ui/Card";
-import { ChevronRight, Flame, Plus, Search, Sparkles, Target, TrendingUp } from "lucide-react";
+import { BarChart, ChevronRight, Flame, Plus, Search, Sparkles, Target, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import {
+  LineChart,
+  Line,
+  ResponsiveContainer
+} from "recharts";
 
 export default function Dashboard() {
 
@@ -126,6 +133,61 @@ export default function Dashboard() {
               Parabéns! Sua média está ótima.
             </p>
           </CardContent>
+        </Card>
+      </div>
+      <div className="w-full flex flex-row gap-4">
+        <Card className="w-3/5 p-6">
+          <CardHeader className="flex flex-row justify-between items-center mb-3">
+            <div className="flex flex-col gap-1.5">
+              <p className="text-sm text-[var(--text)] font-semibold">Produtividade Semanal (Tarefas Realizadas)</p>
+              <p className="text-xs text-[var(--text-secundary)] font-semibold">Média diária de 6.4 tarefas entregues</p>
+            </div>
+
+            <p className="text-xs font-semibold text-[var(--text-secundary)] bg-[var(--background)] px-2 py-1 rounded-xl">Últimos 7 dias</p>
+          </CardHeader>
+
+          <CardContent>
+            <div className="flex flex-row">
+              <WeeklyProductivityChart />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="w-2/5 p-6">
+          <CardHeader>
+            <p className="text-sm text-[var(--text)] font-semibold mb-4">Distribuição por Categoria</p>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-5">
+              <CategoryProgress
+                  label="Trabalho"
+                  value={7}
+                  color="bg-indigo-500"
+                  percentage={100}
+              />
+
+              <CategoryProgress
+                  label="Pessoal"
+                  value={2}
+                  color="bg-emerald-500"
+                  percentage={50}
+              />
+
+              <CategoryProgress
+                  label="Estudos"
+                  value={3}
+                  color="bg-blue-500"
+                  percentage={20}
+              />
+
+              <CategoryProgress
+                  label="Projetos"
+                  value={4}
+                  color="bg-purple-500"
+                  percentage={30}
+              />
+          </div>
+          </CardContent>
+          {/* Futuramente colocar um grafico com porcentagem de evolução mensal aqui */}
         </Card>
       </div>
     </div>
