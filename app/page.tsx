@@ -1,4 +1,4 @@
-import Authentication from "./(auth)/login/page";
+// import Authentication from "./(auth)/login/page";
 import Dashboard from "./dashboard/page";
 
 export default function Home() {
