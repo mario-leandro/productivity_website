@@ -14,7 +14,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <div className="w-full h-[calc(100%-80px)] flex flex-row">
         <SideBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-        <div className="flex-1">
+        <div className="flex-1 overflow-y-auto">
           <main>{children}</main>
         </div>
       </div>

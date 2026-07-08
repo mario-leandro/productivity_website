@@ -25,7 +25,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} h-full antialiased`}
     >
-      <body className="h-full overflow-hidden">
+      <body className="max-h-screen h-full overflow-hidden">
         <Providers>
           <AppLayout>{children}</AppLayout>
         </Providers>

@@ -209,13 +209,114 @@ export function BottomCards() {
             </p>
           </div>
 
-          <Link href={"/"}>
+          <Link
+            className="flex flex-row items-center gap-1 text-xs font-semibold text-[var(--primary)]"
+            href={"/"}
+          >
             Adicionar Evento
             <Plus size={15} />
           </Link>
         </CardHeader>
+        <CardContent className="flex flex-col gap-3">
+          <div className="flex flex-row justify-between items-center gap-3 bg-[var(--background)] border-l-4 border-[var(--primary)] rounded-xl px-3 py-2">
+            <div className="flex flex-col gap-1">
+              <p className="text-sm text-[var(--text)] font-semibold">
+                Reunião de Alinhamento
+              </p>
+              <p className="text-xs text-[var(--text-secundary)]">
+                Plataforma Google Meet
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center bg-[var(--surface)] px-2 py-0.5 rounded-md">
+              <span className="text-xs font-bold text-[var(--text)]">
+                09:00 - 09:30
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-row justify-between items-center gap-3 bg-[var(--background)] border-l-4 border-[var(--primary)] rounded-xl px-3 py-2">
+            <div className="flex flex-col gap-1">
+              <p className="text-sm text-[var(--text)] font-semibold">
+                Testes de integração
+              </p>
+              <p className="text-xs text-[var(--text-secundary)]">
+                Testar integração entre sistemas
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center bg-[var(--surface)] px-2 py-0.5 rounded-md">
+              <span className="text-xs font-bold text-[var(--text)]">
+                14:00 - 15:00
+              </span>
+            </div>
+          </div>
+          <div className="flex flex-row justify-between items-center gap-3 bg-[var(--background)] border-l-4 border-[var(--primary)] rounded-xl px-3 py-2">
+            <div className="flex flex-col gap-1">
+              <p className="text-sm text-[var(--text)] font-semibold">
+                Acionamentos da juma M&S
+              </p>
+              <p className="text-xs text-[var(--text-secundary)]">
+                Monitorar acionamentos da Modena e Silva
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center bg-[var(--surface)] px-2 py-0.5 rounded-md">
+              <span className="text-xs font-bold text-[var(--text)]">
+                15:00 - 16:00
+              </span>
+            </div>
+          </div>
+        </CardContent>
       </Card>
-      <Card className="w-1/2 p-6"></Card>
+
+      <Card className="w-1/2 p-6">
+        <CardHeader>
+          <div className="flex flex-row justify-between items-center">
+            <div className="flex flex-col gap-1">
+              <p className="text-sm text-[var(--text)] font-semibold">
+                Notas Recentes & Fixadas
+              </p>
+              <p className="text-xs text-[var(--text-secundary)] font-semibold">
+                Acesse rapidamente seus rascunhos
+              </p>
+            </div>
+
+            <Link
+              className="flex flex-row items-center gap-1 text-xs font-semibold text-[var(--primary)]"
+              href={"/dashboard/notes"}
+            >
+              Ver todas as notas
+              <ChevronRight size={15} />
+            </Link>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="w-full grid grid-cols-2 grid-rows-2 gap-2 mt-4">
+            <Card className="h-full bg-[var(--surface-three)] p-3">
+              <CardHeader>
+                <div className="flex flex-row justify-between items-center">
+                  <p className="text-sm text-[var(--text)] uppercase font-semibold">
+                    NOTA
+                  </p>
+                  <p className="text-xs text-amber-300 bg-amber-950/50 px-1 rounded-sm">
+                    Fixada
+                  </p>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-[var(--text)] font-semibold">
+                  Manual de Uso do Aura 🚀
+                </p>
+                <p className="text-xs text-[var(--text-secundary)]">
+                  Descubra como configurar seu perfil, entender as principais
+                  funcionalidades...
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

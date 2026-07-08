@@ -16,8 +16,8 @@ export default function Dashboard() {
   const formattedDate = now.toLocaleDateString("pt-BR", options);
 
   return (
-    <div className="w-full h-full flex flex-col p-6 gap-4 overflow-y-auto">
-      <div className="w-full flex flex-col md:flex-row justify-between items-center gap-3">
+    <div className="flex flex-col p-6 gap-4 overflow-y-auto">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-3">
         <div className="flex flex-col">
           <h1 className="text-2xl font-bold">Olá, Usuario</h1>
           <p className="text-sm text-[var(--text-secundary)]">
