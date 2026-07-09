@@ -10,6 +10,7 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface SideBarProps {
   setSidebarOpen: (open: boolean) => void;
@@ -19,11 +20,33 @@ interface SideBarProps {
 export default function SideBar({ setSidebarOpen, sidebarOpen }: SideBarProps) {
   const [activePage, setActivePage] = useState("Dashboard");
 
+  const router = useRouter();
+
   const arrNavItems = [
-    { title: "Dashboard", icon: <LayoutDashboard />, startsActive: true },
-    { title: "Agenda", icon: <Calendar />, startsActive: false },
-    { title: "Tarefas", icon: <SquareCheckBig />, startsActive: false },
-    { title: "Notas", icon: <FileText />, startsActive: false },
+    {
+      title: "Dashboard",
+      icon: <LayoutDashboard />,
+      startsActive: true,
+      url: "/",
+    },
+    {
+      title: "Agenda",
+      icon: <Calendar />,
+      startsActive: false,
+      url: "/agenda",
+    },
+    {
+      title: "Tarefas",
+      icon: <SquareCheckBig />,
+      startsActive: false,
+      url: "/tarefas",
+    },
+    {
+      title: "Notas",
+      icon: <FileText />,
+      startsActive: false,
+      url: "/notas",
+    },
   ];
 
   return (
@@ -64,7 +87,11 @@ export default function SideBar({ setSidebarOpen, sidebarOpen }: SideBarProps) {
         {arrNavItems.map((item) => (
           <button
             key={item.title}
-            onClick={() => setActivePage(item.title)}
+            onClick={() => {
+              setActivePage(item.title);
+              setSidebarOpen(false);
+              router.push(item.url);
+            }}
             className={`
                 flex gap-2 p-1.5 rounded-xl transition-colors
                 ${
