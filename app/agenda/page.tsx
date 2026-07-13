@@ -1,4 +1,11 @@
-import { Plus, Search } from "lucide-react";
+import { Calendario } from "@/src/components/ui/Calendar";
+import {
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  Search,
+} from "lucide-react";
 
 export default function Agenda() {
   const today = new Date();
@@ -34,17 +41,23 @@ export default function Agenda() {
             />
           </div>
 
-          <div className="h-8 bg-[var(--surface)] flex flex-row justify-center items-center gap-2 rounded-xl shadow-md border">
-            <div className="h-full flex flex-row justify-center items-center rounded-xl shadow-md border px-4 py-2">
-              <p className="text-xs text-[var(--text-secundary)]">Mês</p>
+          <div className="h-8 bg-[var(--surface)] flex flex-row justify-center items-center gap-2 rounded-xl shadow-md border border-[var(--surface-four)]">
+            <div className="h-full flex flex-row justify-center items-center rounded-xl shadow-md border">
+              <p className="bg-violet-500/30 text-xs text-[var(--text-secundary)] px-4 py-2 rounded-xl">
+                Mês
+              </p>
             </div>
 
             <div className="h-full flex flex-row justify-center items-center px-4 py-2">
-              <p className="text-xs text-[var(--text-secundary)]">Semana</p>
+              <p className="text-xs text-[var(--text-secundary)] p-2 rounded-xl">
+                Semana
+              </p>
             </div>
 
             <div className="h-full flex flex-row justify-center items-center px-4 py-2">
-              <p className="text-xs text-[var(--text-secundary)]">Dia</p>
+              <p className="text-xs text-[var(--text-secundary)] p-2 rounded-xl">
+                Dia
+              </p>
             </div>
           </div>
 
@@ -57,22 +70,7 @@ export default function Agenda() {
 
       <div className="flex flex-col md:flex-row">
         {/* Div do calendário */}
-        <div className="md:w-2/3 p-6 bg-[var(--surface)] rounded-xl">
-          {/* Cabeçalho do calendário */}
-          <div className="">
-            {/* Nome do mês e ano */}
-            <div>
-              <p className="text-xl font-semibold">{mesAno.toUpperCase()}</p>
-            </div>
-
-            {/* Botões de navegação */}
-            <div>
-              <button>Anterior</button>
-              <button>Hoje</button>
-              <button>Próximo</button>
-            </div>
-          </div>
-        </div>
+        <Calendario />
 
         {/* Div das categorias e gestor de choque de horarios */}
         <div className="md:w-1/3">

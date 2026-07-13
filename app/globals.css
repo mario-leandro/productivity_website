@@ -7,6 +7,7 @@
   --background: #f8fafc;
   --surface-two: #444444;
   --surface-three: #ddd;
+  --surface-four: #f1f5f9;
   --text: #000;
 }
 
@@ -15,6 +16,7 @@
   --surface: #1e293b;
   --surface-two: #334155;
   --surface-three: #020617;
+  --surface-four: #4b556b;
   --background: #0f172a;
   --text: #fff;
   --text-secundary: #94a3b8;
