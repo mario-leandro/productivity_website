@@ -21,7 +21,7 @@ export function Calendario() {
   }, [year, month]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="w-full flex flex-col gap-4">
       <CalendarioHeader
         month={month}
         year={year}
@@ -118,7 +118,7 @@ function CalendarioGrid({ cells }: CalendarGridProps) {
   return (
     <div className="grid grid-cols-7 gap-2">
       {cells.map((cell) => (
-        <CalendarioCell key={cell.date.toISOString()} cell={cell} />
+        <CalendarioCell key={cell.day} cell={cell} />
       ))}
     </div>
   );
