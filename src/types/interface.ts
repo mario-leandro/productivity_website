@@ -19,6 +19,7 @@ export interface CalendarHeaderProps {
   year: number;
   onPrevious(): void;
   onNext(): void;
+  onToday(): void;
 }
 
 export interface MonthViewProps {
