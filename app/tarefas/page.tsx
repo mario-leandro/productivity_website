@@ -100,6 +100,40 @@ export default function Tarefas() {
           </select>
         </div>
       </div>
+
+      <div className="flex flex-col gap-4 bg-[var(--surface)] rounded-2xl p-6">
+        <div className="h-15 flex flex-row justify-between bg-[var(--surface-three)] border border-[var(--surface-four)] rounded-2xl">
+          <div className="flex flex-row">
+            <div className="flex flex-row justify-between items-center p-4">
+              <input type="checkbox" name="completed" id="completed" />
+              <div className="w-full flex flex-col"></div>
+            </div>
+
+            <div className="flex flex-col justify-center items-start">
+              <p className="text-sm text-[var(--text)] font-semibold">
+                Fazer API do Syncro
+              </p>
+              <p className="text-xs text-[var(--text-secundary)]">
+                Integrar API do Syncro com o sistema.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-row gap-3 p-4">
+            <div></div>
+            <div></div>
+            <div>
+              {/* Prioridade */}
+              <span className="bg-yellow-400/43 text-white text-xs uppercase rounded-xl p-2">
+                Média
+              </span>
+
+              {/* Status */}
+              <span className="">A Fazer</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
