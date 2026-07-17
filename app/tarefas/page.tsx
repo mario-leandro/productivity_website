@@ -5,6 +5,7 @@ import {
   List,
   Plus,
   Search,
+  SquareCheckBig,
 } from "lucide-react";
 
 export default function Tarefas() {
@@ -119,17 +120,27 @@ export default function Tarefas() {
             </div>
           </div>
 
-          <div className="flex flex-row gap-3 p-4">
-            <div></div>
-            <div></div>
-            <div>
+          <div className="flex flex-row gap-3 p-4 items-center">
+            <div className="flex flex-row items-center justify-center gap-1 p-1 rounded-sm border border-[var(--surface-four)]">
+              <p className="text-xs text-[var(--text-secundary)]">#Backend</p>
+            </div>
+            <div className="flex flex-row items-center justify-center gap-4 text-xs">
+              <span className="flex flex-row items-center justify-center gap-1 text-[var(--text-secundary)]">
+                <SquareCheckBig size={10} />
+                2/5
+              </span>
+              <p className="text-[var(--text-secundary)]">2026-07-18</p>
+            </div>
+            <div className="flex flex-row gap-2 justify-center items-center">
               {/* Prioridade */}
               <span className="bg-yellow-400/43 text-white text-xs uppercase rounded-xl p-2">
                 Média
               </span>
 
               {/* Status */}
-              <span className="">A Fazer</span>
+              <span className="text-xs p-2 bg-blue-500/20 border border-blue-500/40 rounded-sm">
+                A Fazer
+              </span>
             </div>
           </div>
         </div>
