@@ -9,6 +9,9 @@
   --surface-three: #ddd;
   --surface-four: #f1f5f9;
   --text: #000;
+  --low-priority: #4ade80;
+  --medium-priority: #f59e0b;
+  --high-priority: #f43f5e;
 }
 
 .dark {
@@ -20,6 +23,9 @@
   --background: #0f172a;
   --text: #fff;
   --text-secundary: #94a3b8;
+  --low-priority: #4ade80;
+  --medium-priority: #f59e0b;
+  --high-priority: #f43f5e;
 }
 
 body {

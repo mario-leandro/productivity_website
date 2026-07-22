@@ -1,4 +1,5 @@
 "use client";
+import Timeline from "@/src/components/ui/Timeline";
 import {
   Calendar,
   CheckCircle,
@@ -287,20 +288,7 @@ function TaskComponentKanban() {
 function TaskComponentTimeline() {
   return (
     <div className="flex flex-col gap-4 bg-[var(--surface)] rounded-2xl p-6">
-      <div className="w-full flex flex-row items-center justify-between px-4">
-        <p className="flex flex-row items-center text-sm text-[var(--text)] font-semibold gap-2">
-          Linha do Tempo (Timeline)
-        </p>
-        <span className="text-xs text-[var(--text-secundary)] flex flex-row items-center justify-center">
-          Junho de 2026
-        </span>
-      </div>
-
-      <ul className="list-disc">
-        <li>
-          <div className="w-full flex flex-col"></div>
-        </li>
-      </ul>
+      <Timeline />
     </div>
   );
 }
