@@ -1,12 +1,15 @@
 "use client";
 import {
   Calendar,
+  CheckCircle,
   ChevronRight,
   Funnel,
   GitCommitHorizontal,
   Kanban,
   List,
+  Pencil,
   Plus,
+  Rocket,
   Search,
   SquareCheckBig,
 } from "lucide-react";
@@ -195,7 +198,7 @@ function TaskComponentKanban() {
             <Calendar size={16} />
           </p>
           <span className="text-xs text-[var(--text-secundary)] bg-[var(--surface-three)] w-6 h-6 flex flex-row items-center justify-center rounded-full">
-            0
+            1
           </span>
         </div>
         <div className="flex flex-col gap-4 px-4">
@@ -242,16 +245,40 @@ function TaskComponentKanban() {
         </div>
       </div>
       <div className="h-100 w-100 bg-[var(--surface)] border-t-4 border-yellow-500 rounded-2xl">
-        <div></div>
-        <div></div>
+        <div className="flex flex-row items-center justify-between p-4">
+          <p className="flex flex-row items-center text-xs text-[var(--text)] font-semibold gap-2">
+            Executando
+            <Rocket size={16} />
+          </p>
+          <span className="text-xs text-[var(--text-secundary)] bg-[var(--surface-three)] w-6 h-6 flex flex-row items-center justify-center rounded-full">
+            0
+          </span>
+        </div>
+        <div className="flex flex-col gap-4 px-4"></div>
       </div>
       <div className="h-100 w-100 bg-[var(--surface)] border-t-4 border-purple-500 rounded-2xl">
-        <div></div>
-        <div></div>
+        <div className="flex flex-row items-center justify-between p-4">
+          <p className="flex flex-row items-center text-xs text-[var(--text)] font-semibold gap-2">
+            Revisão
+            <Pencil size={16} />
+          </p>
+          <span className="text-xs text-[var(--text-secundary)] bg-[var(--surface-three)] w-6 h-6 flex flex-row items-center justify-center rounded-full">
+            0
+          </span>
+        </div>
+        <div className="flex flex-col gap-4 px-4"></div>
       </div>
       <div className="h-100 w-100 bg-[var(--surface)] border-t-4 border-green-500 rounded-2xl">
-        <div></div>
-        <div></div>
+        <div className="flex flex-row items-center justify-between p-4">
+          <p className="flex flex-row items-center text-xs text-[var(--text)] font-semibold gap-2">
+            Concluído
+            <CheckCircle size={16} />
+          </p>
+          <span className="text-xs text-[var(--text-secundary)] bg-[var(--surface-three)] w-6 h-6 flex flex-row items-center justify-center rounded-full">
+            0
+          </span>
+        </div>
+        <div className="flex flex-col gap-4 px-4"></div>
       </div>
     </div>
   );
@@ -259,8 +286,21 @@ function TaskComponentKanban() {
 
 function TaskComponentTimeline() {
   return (
-    <div>
-      <p>Timeline</p>
+    <div className="flex flex-col gap-4 bg-[var(--surface)] rounded-2xl p-6">
+      <div className="w-full flex flex-row items-center justify-between px-4">
+        <p className="flex flex-row items-center text-sm text-[var(--text)] font-semibold gap-2">
+          Linha do Tempo (Timeline)
+        </p>
+        <span className="text-xs text-[var(--text-secundary)] flex flex-row items-center justify-center">
+          Junho de 2026
+        </span>
+      </div>
+
+      <ul className="list-disc">
+        <li>
+          <div className="w-full flex flex-col"></div>
+        </li>
+      </ul>
     </div>
   );
 }
