@@ -73,9 +73,7 @@ function TimelineItem({ item }: { item: any }) {
 
       {/* Bolinha */}
       <div className="flex-shrink-0 relative z-10">
-        <div
-          className={`w-2 h-2 rounded-full bg-[var(${item.color})] mt-2 ml-3`}
-        />
+        <div className={`w-2 h-2 rounded-full bg-[var(--primary)] mt-2 ml-3`} />
       </div>
 
       <div className="pb-14">

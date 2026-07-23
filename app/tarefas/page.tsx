@@ -1,4 +1,5 @@
 "use client";
+import Modal from "@/src/components/ui/Modal";
 import Timeline from "@/src/components/ui/Timeline";
 import {
   Calendar,
@@ -18,6 +19,7 @@ import { useState } from "react";
 
 export default function Tarefas() {
   const [activeTab, setActiveTab] = useState("Lista");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const modalTaskList = [
     {
@@ -75,12 +77,169 @@ export default function Tarefas() {
             ))}
           </div>
 
-          <button className="h-8 bg-[var(--secundary)] text-white p-2 rounded-xl text-xs flex justify-center items-center">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="h-8 bg-[var(--secundary)] text-white p-2 rounded-xl text-xs flex justify-center items-center"
+          >
             <Plus size={16} />
             Criar tarefa
           </button>
         </div>
       </div>
+
+      <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
+        <div className="flex flex-col gap-4">
+          <h2 className="text-lg font-semibold">Criar Nova Tarefa</h2>
+
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="title"
+              className="text-xs text-(--text-secundary) font-semibold"
+            >
+              Titulo da Tarefa
+            </label>
+            <input
+              type="text"
+              id="title"
+              className="w-full p-2 rounded-xl text-xs bg-[var(--surface-three)]"
+              placeholder="Ex: Estudar"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="description"
+              className="text-xs text-(--text-secundary) font-semibold"
+            >
+              Descrição da Tarefa
+            </label>
+            <textarea
+              className="w-full min-h-20 p-2 rounded-xl text-xs bg-[var(--surface-three)] resize-y"
+              name="description"
+              id="description"
+              placeholder="Ex: Estudar algoritmos"
+            ></textarea>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="priority"
+                className="text-xs text-(--text-secundary) font-semibold"
+              >
+                Prioridade
+              </label>
+              <select
+                className="w-full p-2 rounded-xl text-xs bg-[var(--surface-three)]"
+                name="priority"
+                id="priority"
+              >
+                <option value="high" className="bg-(--surface-three)">
+                  Alta
+                </option>
+                <option
+                  value="medium"
+                  className="bg-(--surface-three)"
+                  defaultChecked
+                >
+                  Média
+                </option>
+                <option value="low" className="bg-(--surface-three)">
+                  Baixa
+                </option>
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="due-date"
+                className="text-xs text-(--text-secundary) font-semibold"
+              >
+                Vencimento
+              </label>
+              <input
+                type="date"
+                id="due-date"
+                className="w-full p-2 rounded-xl text-xs bg-[var(--surface-three)]"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="category"
+                className="text-xs text-(--text-secundary) font-semibold"
+              >
+                Categoria
+              </label>
+              <select
+                className="w-full p-2 rounded-xl text-xs bg-[var(--surface-three)]"
+                name="category"
+                id="category"
+              >
+                <option value="work" className="bg-(--surface-three)">
+                  Trabalho
+                </option>
+                <option
+                  value="personal"
+                  className="bg-(--surface-three)"
+                  defaultChecked
+                >
+                  Pessoal
+                </option>
+                <option value="study" className="bg-(--surface-three)">
+                  Estudo
+                </option>
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="tags"
+                className="text-xs text-(--text-secundary) font-semibold"
+              >
+                Tags (separadas por vírgula)
+              </label>
+              <input
+                type="text"
+                id="tags"
+                className="w-full p-2 rounded-xl text-xs bg-[var(--surface-three)]"
+                placeholder="Ex: Trabalho, Pessoal, Estudo"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="checklist"
+              className="text-xs text-(--text-secundary) font-semibold"
+            >
+              Checklist (uma sub-tarefa por linha)
+            </label>
+            <div className="flex flex-row gap-2">
+              <textarea
+                name="checklist"
+                id="checklist"
+                className="w-full min-h-20 p-2 rounded-xl text-xs bg-[var(--surface-three)] resize-y"
+                placeholder={`Estudar algoritmos
+Revisar React
+Ler documentação`}
+              ></textarea>
+            </div>
+          </div>
+
+          <div className="flex flex-row justify-end items-center gap-2">
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="text-xs px-4 py-2 rounded-xl bg-[var(--surface-three)]"
+            >
+              Cancelar
+            </button>
+            <button className="text-xs px-4 py-2 rounded-xl bg-[var(--secundary)] text-white">
+              Criar Tarefa
+            </button>
+          </div>
+        </div>
+      </Modal>
 
       <div className="flex flex-row items-center bg-[var(--surface)] p-6 gap-4 rounded-2xl">
         {/* filtro de busca */}
