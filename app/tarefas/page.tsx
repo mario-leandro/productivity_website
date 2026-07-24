@@ -79,7 +79,7 @@ export default function Tarefas() {
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="h-8 bg-[var(--secundary)] text-white p-2 rounded-xl text-xs flex justify-center items-center"
+            className="h-8 bg-[var(--secundary)] text-white p-2 rounded-xl text-xs flex justify-center items-center cursor-pointer"
           >
             <Plus size={16} />
             Criar tarefa
@@ -230,11 +230,11 @@ Ler documentação`}
           <div className="flex flex-row justify-end items-center gap-2">
             <button
               onClick={() => setIsModalOpen(false)}
-              className="text-xs px-4 py-2 rounded-xl bg-[var(--surface-three)]"
+              className="text-xs px-4 py-2 rounded-xl bg-[var(--surface-three)] cursor-pointer"
             >
               Cancelar
             </button>
-            <button className="text-xs px-4 py-2 rounded-xl bg-[var(--secundary)] text-white">
+            <button className="text-xs px-4 py-2 rounded-xl bg-[var(--secundary)] text-white cursor-pointer">
               Criar Tarefa
             </button>
           </div>
