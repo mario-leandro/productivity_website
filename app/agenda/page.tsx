@@ -6,7 +6,28 @@ import { Plus, Search } from "lucide-react";
 import { useState } from "react";
 
 export default function Agenda() {
+  const [activeTab, setActiveTab] = useState("Mês")
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const calendarFilter = [
+    {
+      id: 1,
+      title: "Mês",
+      active: true,
+    },
+    {
+      id: 2,
+      title: "Semana",
+      active: false,
+    },
+    {
+      id: 3,
+      title: "Dia",
+      active: false,
+    },
+  ];
+
+  const activeTabCss = "bg-violet-500/30 text-[var(--text)]";
 
   const today = new Date();
 
@@ -42,23 +63,17 @@ export default function Agenda() {
           </div>
 
           <div className="h-8 bg-[var(--surface)] flex flex-row justify-center items-center gap-2 rounded-xl shadow-md border border-[var(--surface-four)]">
-            <div className="h-full flex flex-row justify-center items-center rounded-xl shadow-md border">
-              <p className="bg-violet-500/30 text-xs text-[var(--text)] px-4 py-2 rounded-xl cursor-pointer">
-                Mês
+            { calendarFilter.map((item) => (
+            <div
+              key={item.id}
+              onClick={() => setActiveTab(item.title)}  
+              className="h-full flex flex-row justify-center items-center rounded-xl shadow-md"
+            >
+              <p className={`${activeTab === item.title ? activeTabCss : "text-[var(--text-secundary)]"} text-xs px-4 py-2 rounded-xl cursor-pointer`}>
+                {item.title}
               </p>
             </div>
-
-            <div className="h-full flex flex-row justify-center items-center">
-              <p className="text-xs text-[var(--text-secundary)] px-4 py-2 rounded-xl cursor-pointer">
-                Semana
-              </p>
-            </div>
-
-            <div className="h-full flex flex-row justify-center items-center">
-              <p className="text-xs text-[var(--text-secundary)] px-4 py-2 rounded-xl cursor-pointer">
-                Dia
-              </p>
-            </div>
+            ))}
           </div>
 
           <button
@@ -257,6 +272,18 @@ export default function Agenda() {
               </select>
             </div>
           </div>
+
+          <div className="flex flex-row justify-end items-center gap-2 mt-2">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-xs px-4 py-2 rounded-xl bg-[var(--surface-three)] cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button className="text-xs px-4 py-2 rounded-xl bg-[var(--secundary)] text-white cursor-pointer">
+                Criar Compromisso
+              </button>
+            </div>
         </div>
       </Modal>
 

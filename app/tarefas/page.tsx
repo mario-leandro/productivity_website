@@ -27,21 +27,18 @@ export default function Tarefas() {
       title: "Lista",
       icon: <List size={12} />,
       active: true,
-      component: TaskComponentList,
     },
     {
       id: 2,
       title: "Kanban",
       icon: <Kanban size={12} />,
       active: false,
-      component: "",
     },
     {
       id: 3,
       title: "Timeline",
       icon: <GitCommitHorizontal size={12} />,
       active: false,
-      component: "",
     },
   ];
 
