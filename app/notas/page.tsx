@@ -20,14 +20,10 @@ import { useState } from "react";
 
 export default function Notas() {
   const [editar, setEditar] = useState(false);
+  const [conteudo, setConteudo] = useState(
+    `# Bem-vindo ao Aura Productivity!\n\nO Aura é o seu novo ecossistema integrado para foco, agilidade e clareza mental. Reunimos as suas três ferramentas fundamentais em uma interface unificada e fluida:\n\n## 1. Calendário Inteligente\n* Visualize o seu dia, semana e mês sem sair de contexto.\n* Controle conflitos de horário com notificações instantâneas de sobreposição de eventos.\n* Arraste compromissos para mudar o dia e horário dinamicamente.\n\n## 2. Gerenciador de Tarefas Poderoso\n* Divida atividades complexas em sub-tarefas (Checklist).\n* Atribua **Prioridade Máxima**, datas de entrega e anexe documentos úteis.\n* Alterne entre as visualizações em **Lista**, **Kanban**, **Calendário** e **Timeline**.\n\n## 3. Notas em Markdown (Notion-style)\n* Organize em pastas inteligentes como '💼Trabalho', '🎓'Estudos' ou '🏠Pessoal'.\n* Escreva rascunhos limpos, relatórios de reunião e fixe no topo os de acesso constante.\n* Utilize templates prontos para reuniões, brainstormings e registros pessoais.\n\n*Dica de Produtividade: Mantenha seu dashboard limpo focando no widget "Resumo do Dia". Um dia produtivo começa com um plano simples!*`
+  );
 
-  const notas = [
-    {
-      id: 1,
-      titulo: "Manual de uso do Syncro",
-      conteudo: `# Bem-vindo ao Aura Productivity!\n\nO Aura é o seu novo ecossistema integrado para foco, agilidade e clareza mental. Reunimos as suas três ferramentas fundamentais em uma interface unificada e fluida:\n\n## 1. Calendário Inteligente\n* Visualize o seu dia, semana e mês sem sair de contexto.\n* Controle conflitos de horário com notificações instantâneas de sobreposição de eventos.\n* Arraste compromissos para mudar o dia e horário dinamicamente.\n\n## 2. Gerenciador de Tarefas Poderoso\n* Divida atividades complexas em sub-tarefas (Checklist).\n* Atribua **Prioridade Máxima**, datas de entrega e anexe documentos úteis.\n* Alterne entre as visualizações em **Lista**, **Kanban**, **Calendário** e **Timeline**.\n\n## 3. Notas em Markdown (Notion-style)\n* Organize em pastas inteligentes como '💼Trabalho', '🎓'Estudos' ou '🏠Pessoal'.\n* Escreva rascunhos limpos, relatórios de reunião e fixe no topo os de acesso constante.\n* Utilize templates prontos para reuniões, brainstormings e registros pessoais.\n\n*Dica de Produtividade: Mantenha seu dashboard limpo focando no widget "Resumo do Dia". Um dia produtivo começa com um plano simples!*`,
-    },
-  ];
 
   return (
     <div className="flex flex-col p-6 gap-4 ">
@@ -187,8 +183,8 @@ export default function Notas() {
                   <div className="bg-(--surface-three) border border-(--surface-four) rounded-xl flex flex-col gap-2 mt-6">
                     <textarea
                       className="w-full h-[500px] rounded-xl p-3 text-[var(--text)] text-base leading-relaxed focus:outline-none resize-none"
-                      value={notas[0].conteudo}
-                      onChange={(e) => setEditar(e.target.value)}
+                      value={conteudo}
+                      onChange={(e) => setConteudo(e.target.value)}
                     />
                   </div>
                 ) : (
@@ -244,7 +240,7 @@ export default function Notas() {
                       remarkPlugins={[remarkGfm]}
                       rehypePlugins={[rehypeHighlight]}
                     >
-                      {notas[0].conteudo}
+                      {conteudo}
                     </ReactMarkdown>
                   </div>
                 )}

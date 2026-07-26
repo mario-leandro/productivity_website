@@ -183,7 +183,116 @@ function WeekDays() {
 export function WeekView() {
   return (
     <div className="md:w-2/3 rounded-xl bg-[var(--surface)] p-6">
-      
+      <WeekHeader />
+
+      <div className="flex mt-6">
+        <TimeColumn />
+
+        <WeekGrid />
+      </div>
+    </div>
+  );
+}
+
+function WeekHeader() {
+  const week = getCurrentWeek();
+
+  return (
+    <div className="grid grid-cols-7 flex-1 ml-20">
+      {week.map((day) => (
+        <div
+          key={day.toISOString()}
+          className="text-center pb-4 border-b border-[var(--surface-four)]"
+        >
+          <p className="text-sm text-[var(--text-secundary)]">
+            {day.toLocaleDateString("pt-BR", {
+              weekday: "short",
+            })}
+          </p>
+
+          <p className="font-semibold">{day.getDate()}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function WeekGrid() {
+  const week = getCurrentWeek();
+
+  return (
+    <div className="grid grid-cols-7 flex-1">
+      {week.map((day) => (
+        <WeekColumn key={day.toISOString()} day={day} />
+      ))}
+    </div>
+  );
+}
+
+function WeekColumn({ day }: { day: Date }) {
+  return (
+    <div className="relative border-l border-[var(--surface-four)]">
+      {Array.from({ length: 13 }).map((_, i) => (
+        <div key={i} className="h-24 border-b border-[var(--surface-four)]" />
+      ))}
+
+      <WeekEvents day={day} />
+    </div>
+  );
+}
+
+function WeekEvents({ day }: { day: Date }) {
+  const events = [
+    {
+      title: "Daily",
+      start: 9,
+      end: 10.5,
+      color: "#8b5cf6",
+    },
+    {
+      title: "Reunião",
+      start: 14,
+      end: 15,
+      color: "#3b82f6",
+    },
+  ];
+
+  return (
+    <>
+      {events.map((event) => (
+        <WeekEvent key={event.title} event={event} />
+      ))}
+    </>
+  );
+}
+
+interface WeekEventProps {
+  event: {
+    title: string;
+    start: number;
+    end: number;
+    color: string;
+  };
+}
+
+function WeekEvent({ event }: WeekEventProps) {
+  const top = (event.start - 8) * 96;
+
+  const height = (event.end - event.start) * 96;
+
+
+  return (
+    <div
+      className="absolute left-1 right-1 rounded-lg p-2 text-white text-xs"
+      style={{
+        top,
+        height,
+        background: event.color,
+      }}
+    >
+      <strong>{event.title}</strong>
+
+      <p>{event.start}:00</p>
     </div>
   );
 }
@@ -191,7 +300,21 @@ export function WeekView() {
 export function DayView() {
   return (
     <div className="md:w-2/3 rounded-xl bg-[var(--surface)] p-6">
+      {/* <TimeColumn /> */}
+    </div>
+  );
+}
 
+export function TimeColumn() {
+  const hours = Array.from({ length: 13 }, (_, i) => i + 8);
+
+  return (
+    <div className="flex flex-col w-20">
+      {hours.map((hour) => (
+        <div key={hour} className="h-24">
+          {hour}:00
+        </div>
+      ))}
     </div>
   );
 }
@@ -251,4 +374,17 @@ function generateCalendar(year: number, month: number) {
   }
 
   return cells;
+}
+
+function getCurrentWeek(): Date[] {
+  const current = new Date();
+  const dayOfWeek = current.getDay();
+
+  const week: Date[] = [];
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(current);
+    date.setDate(current.getDate() - dayOfWeek + i);
+    week.push(date);
+  }
+  return week;
 }
