@@ -1,5 +1,5 @@
 "use client";
-import { Calendario } from "@/src/components/ui/Calendar";
+import { Calendario, DayView, WeekView } from "@/src/components/ui/Calendar";
 import { Card, CardContent, CardHeader } from "@/src/components/ui/Card";
 import Modal from "@/src/components/ui/Modal";
 import { Plus, Search } from "lucide-react";
@@ -289,7 +289,9 @@ export default function Agenda() {
 
       <div className="flex flex-col md:flex-row gap-4">
         {/* Div do calendário */}
-        <Calendario />
+        {activeTab === "Mês" && <Calendario />}
+        {activeTab === "Semana" && <WeekView />}
+        {activeTab === "Dia" && <DayView />}
 
         {/* Div das categorias e gestor de choque de horarios */}
         <div className="md:w-1/3 flex flex-col gap-4">

@@ -180,12 +180,20 @@ function WeekDays() {
   );
 }
 
-function WeekView() {
-  return <div>Semana</div>;
+export function WeekView() {
+  return (
+    <div className="md:w-2/3 rounded-xl bg-[var(--surface)] p-6">
+      
+    </div>
+  );
 }
 
-function DayView() {
-  return <div>Day</div>;
+export function DayView() {
+  return (
+    <div className="md:w-2/3 rounded-xl bg-[var(--surface)] p-6">
+
+    </div>
+  );
 }
 
 function generateCalendar(year: number, month: number) {
