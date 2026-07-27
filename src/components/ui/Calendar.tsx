@@ -89,13 +89,24 @@ function CalendarioHeader({
       </div>
 
       <div className="flex gap-2">
-        <button onClick={onPrevious}>
+        <button
+          className="rounded-lg p-2 text-xs border border-[var(--surface-four)]"
+          onClick={onPrevious}
+        >
           <ChevronLeft />
         </button>
 
-        <button onClick={onToday}>Hoje</button>
+        <button
+          className="rounded-lg p-2 text-xs border border-[var(--surface-four)]"
+          onClick={onToday}
+        >
+          Hoje
+        </button>
 
-        <button onClick={onNext}>
+        <button
+          className="rounded-lg p-2 text-xs border border-[var(--surface-four)]"
+          onClick={onNext}
+        >
           <ChevronRight />
         </button>
       </div>
@@ -183,12 +194,40 @@ function WeekDays() {
 export function WeekView() {
   return (
     <div className="md:w-2/3 rounded-xl bg-[var(--surface)] p-6">
-      <WeekHeader />
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Calendar size={18} />
 
-      <div className="flex">
-        <TimeColumn />
+          <span className="font-semibold uppercase">
+            Semana de 27 à 31 de Julho
+          </span>
+        </div>
 
-        <WeekGrid />
+        <div className="flex gap-2">
+          <button className="rounded-lg p-2 text-xs border border-[var(--surface-four)]">
+            <ChevronLeft />
+          </button>
+
+          <button className="rounded-lg p-2 text-xs border border-[var(--surface-four)]">
+            Hoje
+          </button>
+
+          <button className="rounded-lg p-2 text-xs border border-[var(--surface-four)]">
+            <ChevronRight />
+          </button>
+        </div>
+      </div>
+
+      <hr className="border-(--surface-four) my-4" />
+
+      <div>
+        <WeekHeader />
+
+        <div className="flex">
+          <TimeColumn />
+
+          <WeekGrid />
+        </div>
       </div>
     </div>
   );
@@ -249,8 +288,6 @@ function WeekEvents({ day }: { day: Date }) {
       end: 10,
       color: "#8b5cf6",
       date: "2026-07-27",
-      inicio: "09:00",
-      fim: "10:00",
     },
     {
       title: "Reunião",
@@ -258,8 +295,6 @@ function WeekEvents({ day }: { day: Date }) {
       end: 15,
       color: "#3b82f6",
       date: "2026-07-28",
-      inicio: "14:00",
-      fim: "15:00",
     },
   ];
 
@@ -301,17 +336,16 @@ function WeekEvent({ event }: WeekEventProps) {
     >
       <strong>{event.title}</strong>
 
-      <p>{event.start}:00</p>
+      <p>
+        {String(event.start).padStart(2, "0")}:00 -{" "}
+        {String(event.end).padStart(2, "0")}:00
+      </p>
     </div>
   );
 }
 
 export function DayView() {
-  return (
-    <div className="md:w-2/3 rounded-xl bg-[var(--surface)] p-6">
-      {/* <TimeColumn /> */}
-    </div>
-  );
+  return <div className="md:w-2/3 rounded-xl bg-[var(--surface)] p-6"></div>;
 }
 
 export function TimeColumn() {
