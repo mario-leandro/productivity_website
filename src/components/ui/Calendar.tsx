@@ -185,7 +185,7 @@ export function WeekView() {
     <div className="md:w-2/3 rounded-xl bg-[var(--surface)] p-6">
       <WeekHeader />
 
-      <div className="flex mt-6">
+      <div className="flex">
         <TimeColumn />
 
         <WeekGrid />
@@ -246,20 +246,30 @@ function WeekEvents({ day }: { day: Date }) {
     {
       title: "Daily",
       start: 9,
-      end: 10.5,
+      end: 10,
       color: "#8b5cf6",
+      date: "2026-07-27",
+      inicio: "09:00",
+      fim: "10:00",
     },
     {
       title: "Reunião",
       start: 14,
       end: 15,
       color: "#3b82f6",
+      date: "2026-07-28",
+      inicio: "14:00",
+      fim: "15:00",
     },
   ];
 
+  const dayEvents = events.filter(
+    (event) => event.date === day.toISOString().split("T")[0],
+  );
+
   return (
     <>
-      {events.map((event) => (
+      {dayEvents.map((event) => (
         <WeekEvent key={event.title} event={event} />
       ))}
     </>
@@ -279,7 +289,6 @@ function WeekEvent({ event }: WeekEventProps) {
   const top = (event.start - 8) * 96;
 
   const height = (event.end - event.start) * 96;
-
 
   return (
     <div
