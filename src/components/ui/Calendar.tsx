@@ -345,7 +345,88 @@ function WeekEvent({ event }: WeekEventProps) {
 }
 
 export function DayView() {
-  return <div className="md:w-2/3 rounded-xl bg-[var(--surface)] p-6"></div>;
+  return (
+    <div className="md:w-2/3 rounded-xl bg-[var(--surface)] p-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Calendar size={18} />
+
+          <span className="font-semibold uppercase">28 de Julho de 2026</span>
+        </div>
+
+        <div className="flex gap-2">
+          <button className="rounded-lg p-2 text-xs border border-[var(--surface-four)]">
+            <ChevronLeft />
+          </button>
+
+          <button className="rounded-lg p-2 text-xs border border-[var(--surface-four)]">
+            Hoje
+          </button>
+
+          <button className="rounded-lg p-2 text-xs border border-[var(--surface-four)]">
+            <ChevronRight />
+          </button>
+        </div>
+      </div>
+
+      <hr className="my-4 border-[var(--surface-four)]" />
+
+      <div className="flex">
+        <TimeColumn />
+
+        <DayColumn />
+      </div>
+    </div>
+  );
+}
+
+function DayColumn() {
+  return (
+    <div className="relative flex-1 border-l border-[var(--surface-four)]">
+      {Array.from({ length: 13 }).map((_, i) => (
+        <div key={i} className="h-24 border-b border-[var(--surface-four)]" />
+      ))}
+
+      <DayEvents />
+    </div>
+  );
+}
+
+function DayEvents() {
+  const events = [
+    {
+      title: "Daily Standup",
+      start: 9,
+      end: 9.5,
+      color: "#8b5cf6",
+    },
+    {
+      title: "Design Review",
+      start: 10,
+      end: 11.5,
+      color: "#7c3aed",
+    },
+    {
+      title: "Sessão de Foco",
+      start: 14,
+      end: 16,
+      color: "#4f46e5",
+    },
+    {
+      title: "Academia",
+      start: 18,
+      end: 19.25,
+      color: "#10b981",
+    },
+  ];
+
+  return (
+    <>
+      {events.map((event) => (
+        <WeekEvent key={event.title} event={event} />
+      ))}
+    </>
+  );
 }
 
 export function TimeColumn() {
