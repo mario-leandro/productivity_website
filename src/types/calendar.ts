@@ -1,5 +1,16 @@
 import { ReactNode } from "react";
-import { CalendarCellType } from "./types";
+
+export type CalendarCellType = {
+  date: Date;
+  day: number;
+  currentMonth: boolean;
+  isToday: boolean;
+  events: {
+    id: string;
+    title: string;
+    color?: string;
+  }[];
+};
 
 export interface CalendarProps {
   children?: ReactNode;

@@ -7,7 +7,7 @@ import {
   CalendarHeaderProps,
   MonthViewProps,
   CalendarEventProps,
-} from "@/src/types/interface";
+} from "@/src/types/calendar";
 import { ChevronLeft, ChevronRight, Calendar } from "lucide-react";
 
 export function Calendario() {
