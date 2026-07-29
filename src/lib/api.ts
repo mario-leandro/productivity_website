@@ -4,8 +4,10 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function sendRequest<T = any>(
   endpoint: string,
-  { method = "GET", data, token }: RequestOptions = {},
+  { method = "GET", data }: RequestOptions = {},
 ): Promise<T> {
+  const token = localStorage.getItem("token");
+
   const response = await fetch(`${API_URL}${endpoint}`, {
     method,
     headers: {

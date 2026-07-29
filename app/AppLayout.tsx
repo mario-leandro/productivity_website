@@ -1,11 +1,26 @@
 "use client";
 
-import { useState } from "react";
 import Header from "@/src/components/Header";
 import SideBar from "@/src/components/SideBar";
+import { useAuth } from "@/src/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace("/login");
+    }
+  }, [user, loading, router]);
+
+  if (loading) return <div>Carregando...</div>;
+
+  if (!user) return null;
 
   return (
     <>
