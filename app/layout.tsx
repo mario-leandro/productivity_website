@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import AppLayout from "./AppLayout";
 import { Providers } from "./providers";
 
 const inter = Inter({
@@ -26,9 +25,7 @@ export default function RootLayout({
       className={`${inter.variable} h-full antialiased`}
     >
       <body className="max-h-screen h-full overflow-hidden">
-        <Providers>
-          <AppLayout>{children}</AppLayout>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

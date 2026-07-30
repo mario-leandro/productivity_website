@@ -18,7 +18,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     }
   }, [user, loading, router]);
 
-  if (loading) return <div>Carregando...</div>;
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-[var(--background)] text-[var(--text)]">
+        Carregando...
+      </div>
+    );
+  }
 
   if (!user) return null;
 

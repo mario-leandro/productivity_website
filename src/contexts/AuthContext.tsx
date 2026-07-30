@@ -24,17 +24,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function loadUser() {
     const token = localStorage.getItem("token");
+    const userStorage = localStorage.getItem("user");
 
-    if (!token) {
+    if (!token || !userStorage) {
       setLoading(false);
       return;
     }
 
     try {
-      const usuario = await getMe();
-      setUser(usuario);
+      setUser(JSON.parse(userStorage));
     } catch {
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
       setUser(null);
     } finally {
       setLoading(false);
@@ -46,14 +47,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   async function login(email: string, password: string) {
-    const response = await sendRequest<{ token: string }>("/auth/login", {
+    const response = await sendRequest("/auth/login", {
       method: "POST",
       data: { email, password },
     });
 
-    localStorage.setItem("token", response.token);
+    if (!response.success) {
+      throw new Error(
+        response.message || response.error || "Erro ao fazer login",
+      );
+    }
 
-    const usuario = await getMe();
+    const token = response.data?.token as string;
+    const usuario = response.data?.user as User;
+
+    if (!token || !usuario) {
+      throw new Error("Resposta de login inválida");
+    }
+
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(usuario));
 
     setUser(usuario);
   }
@@ -67,6 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   function logout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setUser(null);
   }
 

@@ -1,13 +1,25 @@
+"use client";
+
 import { Bell, Sun, Menu, Moon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 
 interface HeaderProps {
-  setSidebarOpen: (open: boolean) => void;
-  sidebarOpen: boolean;
+  sidebarOpen?: boolean;
+  setSidebarOpen?: (open: boolean) => void;
+
+  showSidebarButton?: boolean;
+  showNotifications?: boolean;
+  showThemeToggle?: boolean;
 }
 
-export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
+export default function Header({
+  sidebarOpen = false,
+  setSidebarOpen,
+  showSidebarButton = false,
+  showNotifications = true,
+  showThemeToggle = true,
+}: HeaderProps) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -15,41 +27,43 @@ export default function Header({ setSidebarOpen, sidebarOpen }: HeaderProps) {
     setMounted(true);
   }, []);
 
-  if (!mounted) {
-    return null;
-  }
+  if (!mounted) return null;
 
   return (
-    <div className="w-full h-20 flex flex-row justify-between items-center border-b border-[var(--surface)] px-6">
-      <button
-        className="md:hidden"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-      >
-        <Menu />
-      </button>
+    <header className="w-full h-20 flex items-center justify-between border-b border-[var(--surface)] px-6 bg-[var(--background)]">
+      <div className="flex items-center gap-3">
+        {showSidebarButton && setSidebarOpen && (
+          <button
+            className="md:hidden"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
+            <Menu />
+          </button>
+        )}
 
-      <h1 className="text-2xl font-bold text-[var(--text)]">Syncro</h1>
-
-      <div className="flex flex-row gap-6">
-        <button
-          id="notificationsBtn"
-          className="bg-[var(--surface)] hover:bg-slate-700 p-3 rounded-xl cursor-pointer transition-colors duration-200"
-        >
-          <Bell className="text-[var(--text)]" size={15} />
-        </button>
-
-        <button
-          id="themeBtn"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="bg-[var(--surface)] hover:bg-slate-700 p-3 rounded-xl cursor-pointer transition-colors duration-200"
-        >
-          {theme === "dark" ? (
-            <Moon size={15} />
-          ) : (
-            <Sun className="text-yellow-500" size={15} />
-          )}
-        </button>
+        <h1 className="text-2xl font-bold text-[var(--text)]">Syncro</h1>
       </div>
-    </div>
+
+      <div className="flex items-center gap-4">
+        {showNotifications && (
+          <button className="bg-[var(--surface)] hover:bg-slate-700 p-3 rounded-xl transition-colors">
+            <Bell className="text-[var(--text)]" size={15} />
+          </button>
+        )}
+
+        {showThemeToggle && (
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="bg-[var(--surface)] hover:bg-slate-700 p-3 rounded-xl transition-colors"
+          >
+            {theme === "dark" ? (
+              <Moon size={15} />
+            ) : (
+              <Sun className="text-yellow-500" size={15} />
+            )}
+          </button>
+        )}
+      </div>
+    </header>
   );
 }

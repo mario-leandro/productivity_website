@@ -13,7 +13,10 @@ export interface AuthResponse {
   token: string;
 }
 
-export interface User {
+export type User = {
   id: number;
+  name: string;
   email: string;
-}
+  plan?: string;
+  avatar?: string | null;
+};

@@ -2,7 +2,7 @@ import Dashboard from "./dashboard/page";
 
 export default function Home() {
   return (
-    <div className="bg-[var(--background)] font-sans">
+    <div className="bg-[var(--background)] font-sans h-full">
       <Dashboard />
     </div>
   );

@@ -10,7 +10,9 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useAuth } from "@/src/contexts/AuthContext";
 
 interface SideBarProps {
   setSidebarOpen: (open: boolean) => void;
@@ -18,33 +20,31 @@ interface SideBarProps {
 }
 
 export default function SideBar({ setSidebarOpen, sidebarOpen }: SideBarProps) {
+  const { user } = useAuth();
+
   const [activePage, setActivePage] = useState("Dashboard");
 
-  const router = useRouter();
+  const pathname = usePathname();
 
   const arrNavItems = [
     {
       title: "Dashboard",
       icon: <LayoutDashboard />,
-      startsActive: true,
       url: "/",
     },
     {
       title: "Agenda",
       icon: <Calendar />,
-      startsActive: false,
       url: "/agenda",
     },
     {
       title: "Tarefas",
       icon: <SquareCheckBig />,
-      startsActive: false,
       url: "/tarefas",
     },
     {
       title: "Notas",
       icon: <FileText />,
-      startsActive: false,
       url: "/notas",
     },
   ];
@@ -85,25 +85,18 @@ export default function SideBar({ setSidebarOpen, sidebarOpen }: SideBarProps) {
         </div>
 
         {arrNavItems.map((item) => (
-          <button
-            key={item.title}
-            onClick={() => {
-              setActivePage(item.title);
-              setSidebarOpen(false);
-              router.push(item.url);
-            }}
-            className={`
-                flex gap-2 p-1.5 rounded-xl transition-colors
-                ${
-                  activePage === item.title
-                    ? "bg-[var(--primary)] text-white"
-                    : "text-[var(--text-secundary)] hover:bg-[var(--surface)] hover:text-[var(--text)]"
-                }
-                `}
+          <Link
+            key={item.url}
+            href={item.url}
+            className={`flex gap-2 p-2 rounded-xl transition-colors ${
+              pathname === item.url
+                ? "bg-[var(--primary)] text-white"
+                : "text-[var(--text-secundary)] hover:bg-[var(--surface)] hover:text-[var(--text)]"
+            }`}
           >
             {item.icon}
             {item.title}
-          </button>
+          </Link>
         ))}
       </div>
 
@@ -127,8 +120,12 @@ export default function SideBar({ setSidebarOpen, sidebarOpen }: SideBarProps) {
           <User className="text-[var(--text)]" size={35} />
 
           <div className="flex flex-col">
-            <span className="text-sm text-[var(--text)]">Mario Marques</span>
-            <span className="text-sm text-[var(--text)]">premium</span>
+            <span className="text-sm text-[var(--text)]">
+              {user?.name || "Usuário"}
+            </span>
+            <span className="text-sm text-[var(--text)]">
+              {user?.plan || "Plano Free"}
+            </span>
           </div>
         </div>
       </div>
