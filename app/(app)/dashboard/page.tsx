@@ -4,6 +4,7 @@ import {
   MiddleCards,
 } from "@/src/components/CardsInDash";
 import { Plus, Search } from "lucide-react";
+import Link from "next/link";
 
 export default function Dashboard() {
   const now = new Date();
@@ -27,19 +28,22 @@ export default function Dashboard() {
         </div>
 
         <div className="flex flex-col md:flex-row items-center gap-3">
-          <div className="flex flex-row items-center gap-2 bg-[var(--surface)] rounded-xl p-1.5">
-            <Search size={15} className="text-[var(--text)]" />
+          <div className="w-72 h-8 flex flex-row items-center gap-2 bg-[var(--surface)] rounded-xl p-1.5">
+            <Search size={15} className="text-[var(--text-secundary)]" />
             <input
               type="text"
-              placeholder="Buscar tarefas"
-              className="bg-[var(--surface)] text-[var(--text)]"
+              placeholder="Pesquisar em tudo..."
+              className="bg-[var(--surface)] text-[var(--text)] placeholder:text-(--text-secundary) outline-none text-xs"
             />
           </div>
 
-          <button className="flex flex-row justify-center items-center gap-1.5 bg-[var(--primary)] text-white text-sm p-2 rounded-xl">
+          <Link
+            href={"/tarefas"}
+            className="h-8 bg-[var(--secundary)] text-white p-2 rounded-xl text-xs flex justify-center items-center cursor-pointer"
+          >
             <Plus size={15} />
             Nova Tarefa
-          </button>
+          </Link>
         </div>
       </div>
 

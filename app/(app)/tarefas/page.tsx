@@ -57,7 +57,7 @@ export default function Tarefas() {
           </p>
         </div>
         <div className="flex flex-row justify-center items-center gap-2">
-          <div className="h-8 bg-[var(--surface)] flex flex-row justify-center items-center gap-2 rounded-xl">
+          <div className="h-8 bg-[var(--surface)] flex flex-row justify-center items-center gap-2 border border-[var(--surface-four)] rounded-xl">
             {modalTaskList.map((item) => (
               <div
                 key={item.id}

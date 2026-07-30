@@ -6,7 +6,7 @@ import { Plus, Search } from "lucide-react";
 import { useState } from "react";
 
 export default function Agenda() {
-  const [activeTab, setActiveTab] = useState("Mês")
+  const [activeTab, setActiveTab] = useState("Mês");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const calendarFilter = [
@@ -53,7 +53,7 @@ export default function Agenda() {
         </div>
 
         <div className="flex flex-row justify-center items-center gap-2">
-          <div className="h-8 flex flex-row justify-center items-center gap-2 rounded-xl shadow-md border p-2">
+          <div className="h-8 bg-[var(--surface)] flex flex-row justify-center items-center gap-2 rounded-xl shadow-md p-2">
             <Search className="text-[var(--text-secundary)]" size={16} />
             <input
               type="text"
@@ -63,16 +63,18 @@ export default function Agenda() {
           </div>
 
           <div className="h-8 bg-[var(--surface)] flex flex-row justify-center items-center gap-2 rounded-xl shadow-md border border-[var(--surface-four)]">
-            { calendarFilter.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => setActiveTab(item.title)}  
-              className="h-full flex flex-row justify-center items-center rounded-xl shadow-md"
-            >
-              <p className={`${activeTab === item.title ? activeTabCss : "text-[var(--text-secundary)]"} text-xs px-4 py-2 rounded-xl cursor-pointer`}>
-                {item.title}
-              </p>
-            </div>
+            {calendarFilter.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => setActiveTab(item.title)}
+                className="h-full flex flex-row justify-center items-center rounded-xl shadow-md"
+              >
+                <p
+                  className={`${activeTab === item.title ? activeTabCss : "text-[var(--text-secundary)]"} text-xs px-4 py-2 rounded-xl cursor-pointer`}
+                >
+                  {item.title}
+                </p>
+              </div>
             ))}
           </div>
 
@@ -274,16 +276,16 @@ export default function Agenda() {
           </div>
 
           <div className="flex flex-row justify-end items-center gap-2 mt-2">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-xs px-4 py-2 rounded-xl bg-[var(--surface-three)] cursor-pointer"
-              >
-                Cancelar
-              </button>
-              <button className="text-xs px-4 py-2 rounded-xl bg-[var(--secundary)] text-white cursor-pointer">
-                Criar Compromisso
-              </button>
-            </div>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="text-xs px-4 py-2 rounded-xl bg-[var(--surface-three)] cursor-pointer"
+            >
+              Cancelar
+            </button>
+            <button className="text-xs px-4 py-2 rounded-xl bg-[var(--secundary)] text-white cursor-pointer">
+              Criar Compromisso
+            </button>
+          </div>
         </div>
       </Modal>
 
