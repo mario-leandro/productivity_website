@@ -101,12 +101,12 @@ export default function SideBar({ setSidebarOpen, sidebarOpen }: SideBarProps) {
       </div>
 
       <div className="flex flex-col gap-3">
-        <button
-          onClick={() => setActivePage("Configurações")}
+        <Link
+          href="/configuracoes"
           className={`
             flex gap-2 p-1.5 rounded-xl transition-colors
             ${
-              activePage === "Configurações"
+              pathname === "/configuracoes"
                 ? "bg-[var(--primary)] text-white"
                 : "text-[var(--text-secundary)] hover:bg-[var(--surface)] hover:text-[var(--text)]"
             }
@@ -114,7 +114,7 @@ export default function SideBar({ setSidebarOpen, sidebarOpen }: SideBarProps) {
         >
           <Settings />
           Configurações
-        </button>
+        </Link>
 
         <div className="flex flex-row bg-[var(--surface)] items-center rounded-xl p-4 gap-2">
           <User className="text-[var(--text)]" size={35} />
