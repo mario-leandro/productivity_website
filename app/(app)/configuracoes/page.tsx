@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/src/contexts/AuthContext";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function Configuracoes() {
@@ -23,7 +24,7 @@ export default function Configuracoes() {
       <hr className="text-(--surface-four)" />
 
       <div className="flex flex-row w-full gap-4">
-        <div className="flex flex-col gap-2 w-1/4">
+        {/* <div className="flex flex-col gap-2 w-1/4">
           <p
             onClick={() => setActiveTab("Geral")}
             className={`text-xs text-(--text-secundary) font-semibold p-2 rounded-xl cursor-pointer ${activeTab === "Geral" ? isActive : ""}`}
@@ -48,20 +49,33 @@ export default function Configuracoes() {
           >
             Segurança
           </p>
-        </div>
+        </div> */}
 
         <div className="w-full flex flex-col gap-4">
-          <div className="flex flex-col gap-4">
-            {/* <div>
+          <div className="flex flex-col md:flex-row md:flex-wrap w-full justify-between items-baseline gap-4">
+            <div className="w-full md:w-1/5 flex flex-col gap-2">
               <h2 className="text-lg text-[var(--text)] font-semibold">
                 Perfil
               </h2>
               <p className="text-xs text-(--text-secundary)">
-                Gerencie suas configurações de conta e perfil
+                Atualize suas informações pessoais
               </p>
-            </div> */}
+            </div>
 
-            <div className="flex flex-col md:flex-row gap-2 w-full">
+            <div className="w-full md:w-3/4 flex flex-col gap-2">
+              {/* Imagem de perfil */}
+              <div className="w-full flex flex-row gap-2">
+                <div className="w-24 h-24 rounded-full bg-(--surface-three)">
+                  <Image
+                    src={user?.avatar || "/user.svg"}
+                    alt="Avatar"
+                    width={96}
+                    height={96}
+                    className="rounded-full"
+                  />
+                </div>
+              </div>
+
               <div className="flex flex-col w-full gap-2">
                 <label
                   htmlFor="name"
@@ -93,7 +107,7 @@ export default function Configuracoes() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-2">
+            {/* <div className="flex flex-col gap-2">
               <label
                 htmlFor="plan"
                 className="text-xs text-(--text-secundary) font-semibold"
@@ -107,7 +121,7 @@ export default function Configuracoes() {
                 value="Free"
                 disabled
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
