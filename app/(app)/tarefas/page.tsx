@@ -15,11 +15,35 @@ import {
   Search,
   SquareCheckBig,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { taskService } from "@/src/services/TaskService";
 
 export default function Tarefas() {
   const [activeTab, setActiveTab] = useState("Lista");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [tasks, setTasks] = useState([]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState("medium");
+  const [dueDate, setDueDate] = useState("");
+
+  const handleCreateTask = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    await taskService.create(token, {
+      title,
+      description,
+      priority,
+      due_date: dueDate,
+    });
+    const updated = await taskService.list(token);
+    setTasks(updated);
+    setIsModalOpen(false);
+    setTitle("");
+    setDescription("");
+    setPriority("medium");
+    setDueDate("");
+  };
 
   const modalTaskList = [
     {
@@ -100,6 +124,8 @@ export default function Tarefas() {
               id="title"
               className="w-full p-2 rounded-xl text-xs bg-[var(--surface-three)]"
               placeholder="Ex: Estudar"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
           </div>
 
@@ -115,6 +141,8 @@ export default function Tarefas() {
               name="description"
               id="description"
               placeholder="Ex: Estudar algoritmos"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>
 
@@ -130,6 +158,8 @@ export default function Tarefas() {
                 className="w-full p-2 rounded-xl text-xs bg-[var(--surface-three)]"
                 name="priority"
                 id="priority"
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
               >
                 <option value="high" className="bg-(--surface-three)">
                   Alta
@@ -158,10 +188,12 @@ export default function Tarefas() {
                 type="date"
                 id="due-date"
                 className="w-full p-2 rounded-xl text-xs bg-[var(--surface-three)]"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
               />
             </div>
 
-            <div className="flex flex-col gap-2">
+            {/* <div className="flex flex-col gap-2">
               <label
                 htmlFor="category"
                 className="text-xs text-(--text-secundary) font-semibold"
@@ -172,6 +204,8 @@ export default function Tarefas() {
                 className="w-full p-2 rounded-xl text-xs bg-[var(--surface-three)]"
                 name="category"
                 id="category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
               >
                 <option value="work" className="bg-(--surface-three)">
                   Trabalho
@@ -201,6 +235,8 @@ export default function Tarefas() {
                 id="tags"
                 className="w-full p-2 rounded-xl text-xs bg-[var(--surface-three)]"
                 placeholder="Ex: Trabalho, Pessoal, Estudo"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
               />
             </div>
           </div>
@@ -220,8 +256,11 @@ export default function Tarefas() {
                 placeholder={`Estudar algoritmos
 Revisar React
 Ler documentação`}
+                value={checklist}
+                onChange={(e) => setChecklist(e.target.value)}
               ></textarea>
             </div>
+          </div> */}
           </div>
 
           <div className="flex flex-row justify-end items-center gap-2">
