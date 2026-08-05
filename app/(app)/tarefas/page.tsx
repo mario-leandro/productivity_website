@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { taskService } from "@/src/services/TaskService";
+import { Task } from "@/src/types/task";
 
 export default function Tarefas() {
   const [activeTab, setActiveTab] = useState("Lista");
@@ -28,22 +29,31 @@ export default function Tarefas() {
   const [dueDate, setDueDate] = useState("");
 
   const handleCreateTask = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    await taskService.create(token, {
+    await taskService.create({
       title,
       description,
       priority,
       due_date: dueDate,
     });
-    const updated = await taskService.list(token);
-    setTasks(updated);
+
     setIsModalOpen(false);
     setTitle("");
     setDescription("");
     setPriority("medium");
     setDueDate("");
   };
+
+  useEffect(() => {
+    async function loadTasks() {
+      try {
+        const response = await taskService.list();
+        setTasks(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    loadTasks();
+  }, [tasks]);
 
   const modalTaskList = [
     {
@@ -270,7 +280,10 @@ Ler documentação`}
             >
               Cancelar
             </button>
-            <button className="text-xs px-4 py-2 rounded-xl bg-[var(--secundary)] text-white cursor-pointer">
+            <button
+              onClick={handleCreateTask}
+              className="text-xs px-4 py-2 rounded-xl bg-[var(--secundary)] text-white cursor-pointer"
+            >
               Criar Tarefa
             </button>
           </div>
@@ -329,62 +342,71 @@ Ler documentação`}
         </div>
       </div>
 
-      {activeTab === "Lista" && <TaskComponentList />}
-      {activeTab === "Kanban" && <TaskComponentKanban />}
-      {activeTab === "Timeline" && <TaskComponentTimeline />}
+      {activeTab === "Lista" && <TaskComponentList tasks={tasks} />}
+      {activeTab === "Kanban" && <TaskComponentKanban tasks={tasks} />}
+      {activeTab === "Timeline" && <TaskComponentTimeline tasks={tasks} />}
     </div>
   );
 }
 
-function TaskComponentList() {
+function TaskComponentList({ tasks }: { tasks: Task[] }) {
   return (
     <div className="flex flex-col gap-4 bg-[var(--surface)] rounded-2xl p-6">
-      <div className="h-15 flex flex-row justify-between bg-[var(--surface-three)] border border-[var(--surface-four)] rounded-2xl">
-        <div className="flex flex-row">
-          <div className="flex flex-row justify-between items-center p-4">
-            <input type="checkbox" name="completed" id="completed" />
-            <div className="w-full flex flex-col"></div>
+      {tasks.map((task) => (
+        <div
+          className="h-15 flex flex-row justify-between bg-[var(--surface-three)] border border-[var(--surface-four)] rounded-2xl"
+          key={task.id}
+        >
+          <div className="flex flex-row">
+            <div className="flex flex-row justify-between items-center p-4">
+              <input type="checkbox" name="completed" id="completed" />
+              <div className="w-full flex flex-col"></div>
+            </div>
+
+            <div className="flex flex-col justify-center items-start">
+              <p className="text-sm text-[var(--text)] font-semibold">
+                {task.title}
+              </p>
+              <p className="text-xs text-[var(--text-secundary)]">
+                {task.description}
+              </p>
+            </div>
           </div>
 
-          <div className="flex flex-col justify-center items-start">
-            <p className="text-sm text-[var(--text)] font-semibold">
-              Fazer API do Syncro
-            </p>
-            <p className="text-xs text-[var(--text-secundary)]">
-              Integrar API do Syncro com o sistema.
-            </p>
+          <div className="flex flex-row gap-3 p-4 items-center">
+            {/* <div className="flex flex-row items-center justify-center gap-1 p-1 rounded-sm border border-[var(--surface-four)]">
+              <p className="text-xs text-[var(--text-secundary)]">
+                {task.tags}
+              </p>
+            </div> */}
+            <div className="flex flex-row items-center justify-center gap-4 text-xs">
+              {/* <span className="flex flex-row items-center justify-center gap-1 text-[var(--text-secundary)]">
+                <SquareCheckBig size={10} />
+                {
+                  task.subtask?.filter((subtask) => subtask.completed).length
+                }/ {task.subtask?.length}
+              </span> */}
+              <p className="text-[var(--text-secundary)]">{task.due_date}</p>
+            </div>
+            <div className="flex flex-row gap-2 justify-center items-center">
+              {/* Prioridade */}
+              <span className="bg-yellow-400/43 text-white text-xs uppercase rounded-xl p-2">
+                {task.priority}
+              </span>
+
+              {/* Status */}
+              <span className="text-xs p-2 bg-blue-500/20 border border-blue-500/40 rounded-sm">
+                {task.status}
+              </span>
+            </div>
           </div>
         </div>
-
-        <div className="flex flex-row gap-3 p-4 items-center">
-          <div className="flex flex-row items-center justify-center gap-1 p-1 rounded-sm border border-[var(--surface-four)]">
-            <p className="text-xs text-[var(--text-secundary)]">#Backend</p>
-          </div>
-          <div className="flex flex-row items-center justify-center gap-4 text-xs">
-            <span className="flex flex-row items-center justify-center gap-1 text-[var(--text-secundary)]">
-              <SquareCheckBig size={10} />
-              2/5
-            </span>
-            <p className="text-[var(--text-secundary)]">2026-07-18</p>
-          </div>
-          <div className="flex flex-row gap-2 justify-center items-center">
-            {/* Prioridade */}
-            <span className="bg-yellow-400/43 text-white text-xs uppercase rounded-xl p-2">
-              Média
-            </span>
-
-            {/* Status */}
-            <span className="text-xs p-2 bg-blue-500/20 border border-blue-500/40 rounded-sm">
-              A Fazer
-            </span>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   );
 }
 
-function TaskComponentKanban() {
+function TaskComponentKanban({ tasks }: { tasks: Task[] }) {
   return (
     <div className="flex flex-row gap-4">
       <div className="h-100 w-100 bg-[var(--surface)] border-t-4 border-blue-500 rounded-2xl">
@@ -398,46 +420,53 @@ function TaskComponentKanban() {
           </span>
         </div>
         <div className="flex flex-col gap-4 px-4">
-          <div className="flex flex-col justify-between bg-[var(--surface-three)] border border-[var(--surface-four)] rounded-2xl">
-            <div className="flex flex-col gap-2 p-3">
-              <div className="flex flex-row justify-between items-center">
-                <span className="bg-yellow-400/20 border border-yellow-400/60 text-yellow-400 text-[10px] uppercase rounded p-1">
-                  Média
-                </span>
+          {tasks
+            .filter((task) => task.status === "todo")
+            .map((task) => (
+              <div
+                className="flex flex-col justify-between bg-[var(--surface-three)] border border-[var(--surface-four)] rounded-2xl"
+                key={task.id}
+              >
+                <div className="flex flex-col gap-2 p-3">
+                  <div className="flex flex-row justify-between items-center">
+                    <span className="bg-yellow-400/20 border border-yellow-400/60 text-yellow-400 text-[10px] uppercase rounded p-1">
+                      {task.priority}
+                    </span>
 
-                <div className="flex flex-row">
-                  <button className="flex flex-row items-center justify-center cursor-pointer">
-                    <ChevronRight size={16} />
-                  </button>
+                    <div className="flex flex-row">
+                      <button className="flex flex-row items-center justify-center cursor-pointer">
+                        <ChevronRight size={16} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col justify-center items-start">
+                    <p className="text-sm text-[var(--text)] font-semibold">
+                      {task.title}
+                    </p>
+                    <p className="text-xs text-[var(--text-secundary)]">
+                      {task.description}
+                    </p>
+                  </div>
+
+                  <hr className="border-[var(--surface-four)]" />
+
+                  <div className="flex flex-row justify-between items-center">
+                    {/* <div className="flex flex-row items-center justify-center gap-1 px-1">
+                      <p className="text-xs text-[var(--text-secundary)]">
+                        Estudos
+                      </p>
+                    </div> */}
+
+                    <div className="flex flex-row items-center justify-center gap-1 p-1 rounded-sm">
+                      <p className="text-xs text-[var(--text-secundary)]">
+                        {task.due_date}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              <div className="flex flex-col justify-center items-start">
-                <p className="text-sm text-[var(--text)] font-semibold">
-                  Fazer API do Syncro
-                </p>
-                <p className="text-xs text-[var(--text-secundary)]">
-                  Integrar API do Syncro com o sistema.
-                </p>
-              </div>
-
-              <hr className="border-[var(--surface-four)]" />
-
-              <div className="flex flex-row justify-between items-center">
-                <div className="flex flex-row items-center justify-center gap-1 px-1">
-                  <p className="text-xs text-[var(--text-secundary)]">
-                    Estudos
-                  </p>
-                </div>
-
-                <div className="flex flex-row items-center justify-center gap-1 p-1 rounded-sm">
-                  <p className="text-xs text-[var(--text-secundary)]">
-                    2026-07-20
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+            ))}
         </div>
       </div>
       <div className="h-100 w-100 bg-[var(--surface)] border-t-4 border-yellow-500 rounded-2xl">
@@ -452,7 +481,7 @@ function TaskComponentKanban() {
         </div>
         <div className="flex flex-col gap-4 px-4"></div>
       </div>
-      <div className="h-100 w-100 bg-[var(--surface)] border-t-4 border-purple-500 rounded-2xl">
+      {/* <div className="h-100 w-100 bg-[var(--surface)] border-t-4 border-purple-500 rounded-2xl">
         <div className="flex flex-row items-center justify-between p-4">
           <p className="flex flex-row items-center text-xs text-[var(--text)] font-semibold gap-2">
             Revisão
@@ -463,7 +492,7 @@ function TaskComponentKanban() {
           </span>
         </div>
         <div className="flex flex-col gap-4 px-4"></div>
-      </div>
+      </div> */}
       <div className="h-100 w-100 bg-[var(--surface)] border-t-4 border-green-500 rounded-2xl">
         <div className="flex flex-row items-center justify-between p-4">
           <p className="flex flex-row items-center text-xs text-[var(--text)] font-semibold gap-2">
@@ -480,7 +509,7 @@ function TaskComponentKanban() {
   );
 }
 
-function TaskComponentTimeline() {
+function TaskComponentTimeline({ tasks }: { tasks: Task[] }) {
   return (
     <div className="flex flex-col gap-4 bg-[var(--surface)] rounded-2xl p-6">
       <Timeline />

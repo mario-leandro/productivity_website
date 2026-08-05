@@ -2,24 +2,22 @@ import { sendRequest } from "@/src/lib/api";
 import { Task, CreateTaskData, TaskStatus } from "@/src/types/task";
 
 export const taskService = {
-  list: (token: string) => sendRequest<Task[]>("/tasks", { token }),
+  list: () =>
+    sendRequest<Task[]>("/tasks", {
+      token: localStorage.getItem("token") || "",
+    }),
 
-  create: (token: string, data: CreateTaskData) =>
+  create: (data: CreateTaskData) =>
     sendRequest("/tasks", {
       method: "POST",
-      token,
+      token: localStorage.getItem("token") || "",
       data,
     }),
 
-  updateStatus: (
-    token: string,
-    id: number,
-    status: TaskStatus,
-    position: number,
-  ) =>
-    sendRequest(`/tasks/${id}/status`, {
+  updateStatus: (id: number, status: TaskStatus, position: number) =>
+    sendRequest(`/tasks/status`, {
       method: "PATCH",
-      token,
-      data: { status, position },
+      token: localStorage.getItem("token") || "",
+      data: { id, status, position },
     }),
 };
