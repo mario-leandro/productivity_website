@@ -53,7 +53,7 @@ export default function Tarefas() {
       }
     }
     loadTasks();
-  }, [tasks]);
+  }, []);
 
   const modalTaskList = [
     {

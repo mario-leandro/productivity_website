@@ -1,8 +1,9 @@
 "use client";
 
-import { Bell, Sun, Menu, Moon } from "lucide-react";
+import { Bell, Sun, Menu, Moon, DoorOpen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
+import { useAuth } from "@/src/contexts/AuthContext";
 
 interface HeaderProps {
   sidebarOpen?: boolean;
@@ -22,6 +23,7 @@ export default function Header({
 }: HeaderProps) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  const { logout } = useAuth();
 
   useEffect(() => {
     setMounted(true);
@@ -63,6 +65,13 @@ export default function Header({
             )}
           </button>
         )}
+
+        <button
+          onClick={logout}
+          className="bg-[var(--surface)] hover:bg-slate-700 p-3 rounded-xl transition-colors"
+        >
+          <DoorOpen className="text-red-500" size={15} />
+        </button>
       </div>
     </header>
   );
