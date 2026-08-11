@@ -2,9 +2,11 @@
 import Modal from "@/src/components/ui/Modal";
 import Timeline from "@/src/components/ui/Timeline";
 import {
+  Archive,
   Calendar,
   CheckCircle,
   ChevronRight,
+  Copy,
   Funnel,
   GitCommitHorizontal,
   Kanban,
@@ -14,6 +16,7 @@ import {
   Rocket,
   Search,
   SquareCheckBig,
+  Trash,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { taskService } from "@/src/services/TaskService";
@@ -22,6 +25,7 @@ import { Task } from "@/src/types/task";
 export default function Tarefas() {
   const [activeTab, setActiveTab] = useState("Lista");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -118,6 +122,7 @@ export default function Tarefas() {
         </div>
       </div>
 
+      {/* Modal para criar tarefa */}
       <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
         <div className="flex flex-col gap-4">
           <h2 className="text-lg font-semibold">Criar Nova Tarefa</h2>
@@ -342,14 +347,53 @@ Ler documentação`}
         </div>
       </div>
 
-      {activeTab === "Lista" && <TaskComponentList tasks={tasks} />}
+      {/* Modal para exibir informações da tarefa */}
+      <Modal isOpen={isTaskModalOpen} setIsOpen={setIsTaskModalOpen}>
+        <div className="w-full flex flex-row justify-between items-center">
+          <div>
+            Prioridade: <span className="text-(--text)">Medium</span>
+          </div>
+
+          <div>
+            <button className="cursor-pointer hover:bg-(--surface-three) duration-75 rounded-lg p-2">
+              <Copy className="text-(--text)" size={15} />
+            </button>
+            <button className="cursor-pointer hover:bg-(--surface-three) duration-75 rounded-lg p-2">
+              <Archive className="text-(--text)" size={15} />
+            </button>
+            <button className="cursor-pointer hover:bg-(--surface-three) duration-75 rounded-lg p-2">
+              <Trash className="text-red-500 rounded-lg" size={15} />
+            </button>
+          </div>
+        </div>
+        <div></div>
+        <button
+          className="w-full border border-(--surface-four) rounded-lg p-2"
+          onClick={() => setIsTaskModalOpen(false)}
+        >
+          Fechar Detalhes
+        </button>
+      </Modal>
+
+      {activeTab === "Lista" && (
+        <TaskComponentList
+          tasks={tasks}
+          setIsTaskModalOpen={setIsTaskModalOpen}
+        />
+      )}
       {activeTab === "Kanban" && <TaskComponentKanban tasks={tasks} />}
       {activeTab === "Timeline" && <TaskComponentTimeline tasks={tasks} />}
     </div>
   );
 }
 
-function TaskComponentList({ tasks }: { tasks: Task[] }) {
+function TaskComponentList({
+  tasks,
+  setIsTaskModalOpen,
+}: {
+  tasks: Task[];
+  setIsTaskModalOpen: (isTaskModalOpen: boolean) => void;
+}) {
   return (
     <div className="flex flex-col gap-4 bg-[var(--surface)] rounded-2xl p-6">
       {tasks.map((task) => (
@@ -363,7 +407,10 @@ function TaskComponentList({ tasks }: { tasks: Task[] }) {
               <div className="w-full flex flex-col"></div>
             </div>
 
-            <div className="flex flex-col justify-center items-start">
+            <div
+              className="flex flex-col justify-center items-start"
+              onClick={() => setIsTaskModalOpen(true)}
+            >
               <p className="text-sm text-[var(--text)] font-semibold">
                 {task.title}
               </p>
