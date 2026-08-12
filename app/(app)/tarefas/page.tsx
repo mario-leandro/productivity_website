@@ -26,6 +26,7 @@ export default function Tarefas() {
   const [activeTab, setActiveTab] = useState("Lista");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -351,7 +352,8 @@ Ler documentação`}
       <Modal isOpen={isTaskModalOpen} setIsOpen={setIsTaskModalOpen}>
         <div className="w-full flex flex-row justify-between items-center">
           <div>
-            Prioridade: <span className="text-(--text)">Medium</span>
+            Prioridade:{" "}
+            <span className="text-(--text)">{selectedTask?.priority}</span>
           </div>
 
           <div>
@@ -366,7 +368,20 @@ Ler documentação`}
             </button>
           </div>
         </div>
-        <div></div>
+
+        <hr className="text-(--surface-four) my-4" />
+
+        <div className="w-full flex flex-col gap-4 mb-4">
+          <div>
+            <h2 className="text-lg font-semibold text-(--text)">
+              {selectedTask?.title}
+            </h2>
+            <p className="text-sm text-(--text-secundary)">
+              {selectedTask?.description}
+            </p>
+          </div>
+        </div>
+
         <button
           className="w-full border border-(--surface-four) rounded-lg p-2"
           onClick={() => setIsTaskModalOpen(false)}
@@ -379,6 +394,7 @@ Ler documentação`}
         <TaskComponentList
           tasks={tasks}
           setIsTaskModalOpen={setIsTaskModalOpen}
+          setSelectedTask={setSelectedTask}
         />
       )}
       {activeTab === "Kanban" && <TaskComponentKanban tasks={tasks} />}
@@ -390,9 +406,11 @@ Ler documentação`}
 function TaskComponentList({
   tasks,
   setIsTaskModalOpen,
+  setSelectedTask,
 }: {
   tasks: Task[];
   setIsTaskModalOpen: (isTaskModalOpen: boolean) => void;
+  setSelectedTask: (task: Task) => void;
 }) {
   return (
     <div className="flex flex-col gap-4 bg-[var(--surface)] rounded-2xl p-6">
@@ -409,7 +427,10 @@ function TaskComponentList({
 
             <div
               className="flex flex-col justify-center items-start"
-              onClick={() => setIsTaskModalOpen(true)}
+              onClick={() => {
+                setIsTaskModalOpen(true);
+                setSelectedTask(task);
+              }}
             >
               <p className="text-sm text-[var(--text)] font-semibold">
                 {task.title}
