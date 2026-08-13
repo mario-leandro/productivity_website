@@ -390,15 +390,31 @@ Ler documentação`}
         </button>
       </Modal>
 
-      {activeTab === "Lista" && (
-        <TaskComponentList
+      {tasks.length > 0 ? (
+        activeTab === "Lista" && (
+          <TaskComponentList
+            tasks={tasks}
+            setIsTaskModalOpen={setIsTaskModalOpen}
+            setSelectedTask={setSelectedTask}
+          />
+        )
+        activeTab === "Kanban" && (
+        <TaskComponentKanban 
           tasks={tasks}
           setIsTaskModalOpen={setIsTaskModalOpen}
           setSelectedTask={setSelectedTask}
-        />
+        />)
+        activeTab === "Timeline" && (
+        <TaskComponentTimeline 
+          tasks={tasks}
+          setIsTaskModalOpen={setIsTaskModalOpen}
+          setSelectedTask={setSelectedTask}
+        />)
+      ) : (
+        <div className="flex flex-col items-center justify-center">
+          <p>Nenhuma tarefa encontrada</p>
+        </div>
       )}
-      {activeTab === "Kanban" && <TaskComponentKanban tasks={tasks} />}
-      {activeTab === "Timeline" && <TaskComponentTimeline tasks={tasks} />}
     </div>
   );
 }
@@ -474,13 +490,22 @@ function TaskComponentList({
   );
 }
 
-function TaskComponentKanban({ tasks }: { tasks: Task[] }) {
+function TaskComponentKanban({
+  tasks,
+  setIsTaskModalOpen,
+  setSelectedTask,
+}: {
+  tasks: Task[];
+  setIsTaskModalOpen: (isTaskModalOpen: boolean) => void;
+  setSelectedTask: (task: Task) => void;
+}) {
   return (
     <div className="flex flex-row gap-4">
+      {tasks.map((task) => (
       <div className="h-100 w-100 bg-[var(--surface)] border-t-4 border-blue-500 rounded-2xl">
         <div className="flex flex-row items-center justify-between p-4">
           <p className="flex flex-row items-center text-xs text-[var(--text)] font-semibold gap-2">
-            A Fazer
+            {task.status}
             <Calendar size={16} />
           </p>
           <span className="text-xs text-[var(--text-secundary)] bg-[var(--surface-three)] w-6 h-6 flex flex-row items-center justify-center rounded-full">
@@ -489,7 +514,7 @@ function TaskComponentKanban({ tasks }: { tasks: Task[] }) {
         </div>
         <div className="flex flex-col gap-4 px-4">
           {tasks
-            .filter((task) => task.status === "todo")
+            .filter((task) => task.status === "A Fazer")
             .map((task) => (
               <div
                 className="flex flex-col justify-between bg-[var(--surface-three)] border border-[var(--surface-four)] rounded-2xl"
@@ -537,6 +562,7 @@ function TaskComponentKanban({ tasks }: { tasks: Task[] }) {
             ))}
         </div>
       </div>
+      ))}
       <div className="h-100 w-100 bg-[var(--surface)] border-t-4 border-yellow-500 rounded-2xl">
         <div className="flex flex-row items-center justify-between p-4">
           <p className="flex flex-row items-center text-xs text-[var(--text)] font-semibold gap-2">
@@ -577,7 +603,15 @@ function TaskComponentKanban({ tasks }: { tasks: Task[] }) {
   );
 }
 
-function TaskComponentTimeline({ tasks }: { tasks: Task[] }) {
+function TaskComponentTimeline({ 
+  tasks,
+  setIsTaskModalOpen,
+  setSelectedTask
+}: { 
+  tasks: Task[], 
+  setIsTaskModalOpen: (isTaskModalOpen: boolean) => void, 
+  setSelectedTask: (task: Task) => void 
+}) {
   return (
     <div className="flex flex-col gap-4 bg-[var(--surface)] rounded-2xl p-6">
       <Timeline />
