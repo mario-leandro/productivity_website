@@ -1,13 +1,18 @@
+import { Task } from "@/src/types/task";
 import { ReactNode } from "react";
 
 export default function Modal({
   children,
   isOpen,
   setIsOpen,
+  task,
+  onClose,
 }: {
   children: ReactNode;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  task: Task;
+  onClose: () => void;
 }) {
   return (
     isOpen && (

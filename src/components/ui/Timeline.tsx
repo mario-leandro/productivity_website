@@ -1,54 +1,19 @@
-export default function Timeline() {
-  const timeline = [
-    {
-      id: 1,
-      date: "2026-06-24",
-      priority: "Alta",
-      title: "Finalizar MVP",
-      description: "Concluir todas as tarefas do MVP.",
-      color: "#f43f5e",
-      tasks: [
-        {
-          id: 1,
-          title: "Task 1",
-          completed: false,
-        },
-        {
-          id: 2,
-          title: "Task 2",
-          completed: true,
-        },
-      ],
-    },
-    {
-      id: 2,
-      date: "2026-06-25",
-      priority: "Baixa",
-      title: "Comprar presentes",
-      description: "Comprar presentes para o aniversário.",
-      color: "#eee",
-      tasks: [
-        {
-          id: 1,
-          title: "Task 1",
-          completed: false,
-        },
-        {
-          id: 2,
-          title: "Task 2",
-          completed: true,
-        },
-      ],
-    },
-  ];
+import { Task } from "@/src/types/task";
 
+export default function Timeline({
+  tasks,
+  onSelect,
+}: {
+  tasks: Task[];
+  onSelect: (task: Task) => void;
+}) {
   return (
     <div className="flex flex-col">
       <TimelineHeader />
 
       <div className="relative">
-        {timeline.map((item) => (
-          <TimelineItem key={item.id} item={item} />
+        {tasks.map((item) => (
+          <TimelineItem key={item.id} item={item} onSelect={onSelect} />
         ))}
       </div>
     </div>
@@ -65,9 +30,15 @@ function TimelineHeader() {
   );
 }
 
-function TimelineItem({ item }: { item: any }) {
+function TimelineItem({
+  item,
+  onSelect,
+}: {
+  item: Task;
+  onSelect: (task: Task) => void;
+}) {
   return (
-    <div className="flex gap-6 relative">
+    <div className="flex gap-6 relative" onClick={() => onSelect(item)}>
       {/* Linha vertical */}
       <div className="absolute left-3 top-0 bottom-0 w-px bg-slate-600" />
 
@@ -76,13 +47,13 @@ function TimelineItem({ item }: { item: any }) {
         <div className={`w-2 h-2 rounded-full bg-[var(--primary)] mt-2 ml-3`} />
       </div>
 
-      <div className="pb-14">
+      <div className="w-60 h-25 bg-(--surface-three) p-2 rounded-md border border-(--surface-four)">
         {/* Topo (data + label) */}
         <div className="flex justify-between items-center mb-3">
-          <span className="text-xs text-gray-400">{item.date}</span>
+          <span className="text-xs text-gray-400">{item.due_date}</span>
 
           <span
-            className={`text-[${item.color}] text-[10px] uppercase font-semibold px-2 py-0.5 rounded`}
+            className={`text-[${item.priority}] text-[10px] uppercase font-semibold px-2 py-0.5 rounded`}
           >
             {item.priority}
           </span>

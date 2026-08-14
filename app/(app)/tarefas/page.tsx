@@ -30,7 +30,7 @@ export default function Tarefas() {
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [priority, setPriority] = useState("medium");
+  const [priority, setPriority] = useState("Média");
   const [dueDate, setDueDate] = useState("");
 
   const handleCreateTask = async () => {
@@ -44,7 +44,7 @@ export default function Tarefas() {
     setIsModalOpen(false);
     setTitle("");
     setDescription("");
-    setPriority("medium");
+    setPriority("Média");
     setDueDate("");
   };
 
@@ -177,17 +177,17 @@ export default function Tarefas() {
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
               >
-                <option value="high" className="bg-(--surface-three)">
+                <option value="Alta" className="bg-(--surface-three)">
                   Alta
                 </option>
                 <option
-                  value="medium"
+                  value="Média"
                   className="bg-(--surface-three)"
                   defaultChecked
                 >
                   Média
                 </option>
-                <option value="low" className="bg-(--surface-three)">
+                <option value="Baixa" className="bg-(--surface-three)">
                   Baixa
                 </option>
               </select>
@@ -349,67 +349,69 @@ Ler documentação`}
       </div>
 
       {/* Modal para exibir informações da tarefa */}
-      <Modal isOpen={isTaskModalOpen} setIsOpen={setIsTaskModalOpen}>
-        <div className="w-full flex flex-row justify-between items-center">
-          <div>
-            Prioridade:{" "}
-            <span className="text-(--text)">{selectedTask?.priority}</span>
-          </div>
-
-          <div>
-            <button className="cursor-pointer hover:bg-(--surface-three) duration-75 rounded-lg p-2">
-              <Copy className="text-(--text)" size={15} />
-            </button>
-            <button className="cursor-pointer hover:bg-(--surface-three) duration-75 rounded-lg p-2">
-              <Archive className="text-(--text)" size={15} />
-            </button>
-            <button className="cursor-pointer hover:bg-(--surface-three) duration-75 rounded-lg p-2">
-              <Trash className="text-red-500 rounded-lg" size={15} />
-            </button>
-          </div>
-        </div>
-
-        <hr className="text-(--surface-four) my-4" />
-
-        <div className="w-full flex flex-col gap-4 mb-4">
-          <div>
-            <h2 className="text-lg font-semibold text-(--text)">
-              {selectedTask?.title}
-            </h2>
-            <p className="text-sm text-(--text-secundary)">
-              {selectedTask?.description}
-            </p>
-          </div>
-        </div>
-
-        <button
-          className="w-full border border-(--surface-four) rounded-lg p-2"
-          onClick={() => setIsTaskModalOpen(false)}
+      {selectedTask && (
+        <Modal
+          task={selectedTask}
+          onClose={() => setSelectedTask(null)}
+          isOpen={true}
+          setIsOpen={() => setSelectedTask(null)}
         >
-          Fechar Detalhes
-        </button>
-      </Modal>
+          <div className="w-full flex flex-row justify-between items-center">
+            <div>
+              Prioridade:{" "}
+              <span className="text-(--text)">
+                {selectedTask.priority.charAt(0).toUpperCase() +
+                  selectedTask.priority.slice(1)}
+              </span>
+            </div>
+
+            <div>
+              <button className="cursor-pointer hover:bg-(--surface-three) duration-75 rounded-lg p-2">
+                <Copy className="text-(--text)" size={15} />
+              </button>
+              <button className="cursor-pointer hover:bg-(--surface-three) duration-75 rounded-lg p-2">
+                <Archive className="text-(--text)" size={15} />
+              </button>
+              <button className="cursor-pointer hover:bg-(--surface-three) duration-75 rounded-lg p-2">
+                <Trash className="text-red-500 rounded-lg" size={15} />
+              </button>
+            </div>
+          </div>
+
+          <hr className="text-(--surface-four) my-4" />
+
+          <div className="w-full flex flex-col gap-4 mb-4">
+            <div>
+              <h2 className="text-lg font-semibold text-(--text)">
+                {selectedTask?.title}
+              </h2>
+              <p className="text-sm text-(--text-secundary)">
+                {selectedTask?.description}
+              </p>
+            </div>
+          </div>
+
+          <button
+            className="w-full border border-(--surface-four) rounded-lg p-2"
+            onClick={() => setSelectedTask(null)}
+          >
+            Fechar Detalhes
+          </button>
+        </Modal>
+      )}
 
       {tasks.length > 0 ? (
-        activeTab === "Lista" && (
-          <TaskComponentList
-            tasks={tasks}
-            setIsTaskModalOpen={setIsTaskModalOpen}
-            setSelectedTask={setSelectedTask}
-          />
-        )
-        activeTab === "Kanban" && (
-        <TaskComponentKanban 
-          tasks={tasks}
-          setIsTaskModalOpen={setIsTaskModalOpen}
-          setSelectedTask={setSelectedTask}
-        />)
-        activeTab === "Timeline" && (
-        <TaskComponentTimeline 
-          tasks={tasks}
-          setIsTaskModalOpen={setIsTaskModalOpen}
-          setSelectedTask={setSelectedTask}
-        />)
+        <>
+          {activeTab === "Lista" && (
+            <TaskComponentList tasks={tasks} onSelect={setSelectedTask} />
+          )}
+          {activeTab === "Kanban" && (
+            <TaskComponentKanban tasks={tasks} onSelect={setSelectedTask} />
+          )}
+          {activeTab === "Timeline" && (
+            <TaskComponentTimeline tasks={tasks} onSelect={setSelectedTask} />
+          )}
+        </>
       ) : (
         <div className="flex flex-col items-center justify-center">
           <p>Nenhuma tarefa encontrada</p>
@@ -421,12 +423,10 @@ Ler documentação`}
 
 function TaskComponentList({
   tasks,
-  setIsTaskModalOpen,
-  setSelectedTask,
+  onSelect,
 }: {
   tasks: Task[];
-  setIsTaskModalOpen: (isTaskModalOpen: boolean) => void;
-  setSelectedTask: (task: Task) => void;
+  onSelect: (task: Task) => void;
 }) {
   return (
     <div className="flex flex-col gap-4 bg-[var(--surface)] rounded-2xl p-6">
@@ -435,26 +435,22 @@ function TaskComponentList({
           className="h-15 flex flex-row justify-between bg-[var(--surface-three)] border border-[var(--surface-four)] rounded-2xl"
           key={task.id}
         >
-          <div className="flex flex-row">
-            <div className="flex flex-row justify-between items-center p-4">
-              <input type="checkbox" name="completed" id="completed" />
-              <div className="w-full flex flex-col"></div>
-            </div>
+          <div className="flex flex-row justify-center items-center p-4">
+            <input type="checkbox" name="completed" id="completed" />
+          </div>
 
-            <div
-              className="flex flex-col justify-center items-start"
-              onClick={() => {
-                setIsTaskModalOpen(true);
-                setSelectedTask(task);
-              }}
-            >
-              <p className="text-sm text-[var(--text)] font-semibold">
-                {task.title}
-              </p>
-              <p className="text-xs text-[var(--text-secundary)]">
-                {task.description}
-              </p>
-            </div>
+          <div
+            className="flex-1 flex flex-col justify-center items-start"
+            onClick={() => {
+              onSelect(task);
+            }}
+          >
+            <p className="text-sm text-[var(--text)] font-semibold">
+              {task.title}
+            </p>
+            <p className="text-xs text-[var(--text-secundary)]">
+              {task.description}
+            </p>
           </div>
 
           <div className="flex flex-row gap-3 p-4 items-center">
@@ -492,76 +488,79 @@ function TaskComponentList({
 
 function TaskComponentKanban({
   tasks,
-  setIsTaskModalOpen,
-  setSelectedTask,
+  onSelect,
 }: {
   tasks: Task[];
-  setIsTaskModalOpen: (isTaskModalOpen: boolean) => void;
-  setSelectedTask: (task: Task) => void;
+  onSelect: (task: Task) => void;
 }) {
   return (
     <div className="flex flex-row gap-4">
       {tasks.map((task) => (
-      <div className="h-100 w-100 bg-[var(--surface)] border-t-4 border-blue-500 rounded-2xl">
-        <div className="flex flex-row items-center justify-between p-4">
-          <p className="flex flex-row items-center text-xs text-[var(--text)] font-semibold gap-2">
-            {task.status}
-            <Calendar size={16} />
-          </p>
-          <span className="text-xs text-[var(--text-secundary)] bg-[var(--surface-three)] w-6 h-6 flex flex-row items-center justify-center rounded-full">
-            1
-          </span>
-        </div>
-        <div className="flex flex-col gap-4 px-4">
-          {tasks
-            .filter((task) => task.status === "A Fazer")
-            .map((task) => (
-              <div
-                className="flex flex-col justify-between bg-[var(--surface-three)] border border-[var(--surface-four)] rounded-2xl"
-                key={task.id}
-              >
-                <div className="flex flex-col gap-2 p-3">
-                  <div className="flex flex-row justify-between items-center">
-                    <span className="bg-yellow-400/20 border border-yellow-400/60 text-yellow-400 text-[10px] uppercase rounded p-1">
-                      {task.priority}
-                    </span>
+        <div
+          className="h-100 w-100 bg-[var(--surface)] border-t-4 border-blue-500 rounded-2xl"
+          onClick={() => onSelect(task)}
+          key={task.id}
+        >
+          <div className="flex flex-row items-center justify-between p-4">
+            <p className="flex flex-row items-center text-xs text-[var(--text)] font-semibold gap-2">
+              {task.status}
+              <Calendar size={16} />
+            </p>
+            <span className="text-xs text-[var(--text-secundary)] bg-[var(--surface-three)] w-6 h-6 flex flex-row items-center justify-center rounded-full">
+              1
+            </span>
+          </div>
+          <div className="flex flex-col gap-4 px-4">
+            {tasks
+              .filter((task) => task.status === "A Fazer")
+              .map((task) => (
+                <div
+                  className="flex flex-col justify-between bg-[var(--surface-three)] border border-[var(--surface-four)] rounded-2xl"
+                  key={task.id}
+                  onClick={() => onSelect(task)}
+                >
+                  <div className="flex flex-col gap-2 p-3">
+                    <div className="flex flex-row justify-between items-center">
+                      <span className="bg-yellow-400/20 border border-yellow-400/60 text-yellow-400 text-[10px] uppercase rounded p-1">
+                        {task.priority}
+                      </span>
 
-                    <div className="flex flex-row">
-                      <button className="flex flex-row items-center justify-center cursor-pointer">
-                        <ChevronRight size={16} />
-                      </button>
+                      <div className="flex flex-row">
+                        <button className="flex flex-row items-center justify-center cursor-pointer">
+                          <ChevronRight size={16} />
+                        </button>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="flex flex-col justify-center items-start">
-                    <p className="text-sm text-[var(--text)] font-semibold">
-                      {task.title}
-                    </p>
-                    <p className="text-xs text-[var(--text-secundary)]">
-                      {task.description}
-                    </p>
-                  </div>
+                    <div className="flex flex-col justify-center items-start">
+                      <p className="text-sm text-[var(--text)] font-semibold">
+                        {task.title}
+                      </p>
+                      <p className="text-xs text-[var(--text-secundary)]">
+                        {task.description}
+                      </p>
+                    </div>
 
-                  <hr className="border-[var(--surface-four)]" />
+                    <hr className="border-[var(--surface-four)]" />
 
-                  <div className="flex flex-row justify-between items-center">
-                    {/* <div className="flex flex-row items-center justify-center gap-1 px-1">
+                    <div className="flex flex-row justify-between items-center">
+                      {/* <div className="flex flex-row items-center justify-center gap-1 px-1">
                       <p className="text-xs text-[var(--text-secundary)]">
                         Estudos
                       </p>
                     </div> */}
 
-                    <div className="flex flex-row items-center justify-center gap-1 p-1 rounded-sm">
-                      <p className="text-xs text-[var(--text-secundary)]">
-                        {task.due_date}
-                      </p>
+                      <div className="flex flex-row items-center justify-center gap-1 p-1 rounded-sm">
+                        <p className="text-xs text-[var(--text-secundary)]">
+                          {task.due_date}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+          </div>
         </div>
-      </div>
       ))}
       <div className="h-100 w-100 bg-[var(--surface)] border-t-4 border-yellow-500 rounded-2xl">
         <div className="flex flex-row items-center justify-between p-4">
@@ -603,18 +602,16 @@ function TaskComponentKanban({
   );
 }
 
-function TaskComponentTimeline({ 
+function TaskComponentTimeline({
   tasks,
-  setIsTaskModalOpen,
-  setSelectedTask
-}: { 
-  tasks: Task[], 
-  setIsTaskModalOpen: (isTaskModalOpen: boolean) => void, 
-  setSelectedTask: (task: Task) => void 
+  onSelect,
+}: {
+  tasks: Task[];
+  onSelect: (task: Task) => void;
 }) {
   return (
     <div className="flex flex-col gap-4 bg-[var(--surface)] rounded-2xl p-6">
-      <Timeline />
+      <Timeline tasks={tasks} onSelect={onSelect} />
     </div>
   );
 }
