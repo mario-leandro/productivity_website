@@ -38,11 +38,11 @@ export default function Notas() {
         </div>
 
         <div className="flex flex-row items-center gap-3">
-          <button className="flex flex-row items-center bg-(--secundary) gap-2 p-2 rounded-2xl">
+          <button className="h-8 bg-[var(--secundary)] text-white p-2 rounded-xl text-xs flex justify-center items-center cursor-pointer">
             <Plus size={16} />
             Nova Nota
           </button>
-          <button className="flex flex-row items-center bg-(--surface-four)/20 hover:bg-(--surface-four) transition-colors border border-(--surface-four) gap-2 p-2 rounded-2xl">
+          <button className="h-8 flex flex-row items-center bg-(--surface-four)/20 hover:bg-(--surface-four) transition-colors border border-(--surface-four) gap-2 p-2 rounded-2xl">
             <Sparkles className="text-(--primary)" size={16} />
             Usar Template
           </button>
@@ -144,9 +144,7 @@ export default function Notas() {
         <div className="md:w-3/4">
           <Card className="p-6">
             <CardHeader className="flex flex-row justify-between items-center">
-              <div>
-                <p>Tag</p>
-              </div>
+              <h2 className="text-xl font-bold">Manual de uso do Syncro</h2>
 
               <div className="flex flex-row items-center gap-2">
                 <button className="p-2 rounded-lg border border-(--surface-four) hover:bg-(--surface-three) transition-colors">
@@ -174,8 +172,6 @@ export default function Notas() {
             <hr className="text-(--surface-four) my-5" />
 
             <CardContent>
-              <h2 className="text-xl font-bold">Manual de uso do Syncro</h2>
-
               {/* preview aqui */}
               <div className="mt-6 text-[var(--text)] text-base leading-relaxed">
                 {editar ? (

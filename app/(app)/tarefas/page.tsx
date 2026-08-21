@@ -25,7 +25,6 @@ import { Task } from "@/src/types/task";
 export default function Tarefas() {
   const [activeTab, setActiveTab] = useState("Lista");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
@@ -48,15 +47,16 @@ export default function Tarefas() {
     setDueDate("");
   };
 
-  useEffect(() => {
-    async function loadTasks() {
-      try {
-        const response = await taskService.list();
-        setTasks(response);
-      } catch (error) {
-        console.error(error);
-      }
+  async function loadTasks() {
+    try {
+      const response = await taskService.list();
+      setTasks(response);
+    } catch (error) {
+      console.error(error);
     }
+  }
+
+  useEffect(() => {
     loadTasks();
   }, []);
 
@@ -400,25 +400,47 @@ Ler documentação`}
         </Modal>
       )}
 
-      {tasks.length > 0 ? (
-        <>
-          {activeTab === "Lista" && (
-            <TaskComponentList tasks={tasks} onSelect={setSelectedTask} />
-          )}
-          {activeTab === "Kanban" && (
-            <TaskComponentKanban tasks={tasks} onSelect={setSelectedTask} />
-          )}
-          {activeTab === "Timeline" && (
-            <TaskComponentTimeline tasks={tasks} onSelect={setSelectedTask} />
-          )}
-        </>
-      ) : (
-        <div className="flex flex-col items-center justify-center">
-          <p>Nenhuma tarefa encontrada</p>
-        </div>
-      )}
+      {
+        tasks.length > 0 ?
+          renderTasksView(activeTab, tasks, setSelectedTask)
+          :
+          (
+            <div className="flex flex-col items-center justify-center">
+              <p>Nenhuma tarefa encontrada</p>
+            </div>
+          )
+
+      }
     </div>
   );
+}
+
+function renderTasksView(activeTab: string, tasks: Task[], setSelectedTask: (task: Task) => void) {
+  switch (activeTab) {
+    case "Lista":
+      return (
+        <TaskComponentList
+          tasks={tasks}
+          onSelect={setSelectedTask}
+        />
+      );
+    case "Kanban":
+      return (
+        <TaskComponentKanban
+          tasks={tasks}
+          onSelect={setSelectedTask}
+        />
+      );
+    case "Timeline":
+      return (
+        <TaskComponentTimeline
+          tasks={tasks}
+          onSelect={setSelectedTask}
+        />
+      );
+    default:
+      return null;
+  }
 }
 
 function TaskComponentList({
