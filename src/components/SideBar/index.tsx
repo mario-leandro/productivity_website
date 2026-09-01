@@ -51,31 +51,7 @@ export default function SideBar({ setSidebarOpen, sidebarOpen }: SideBarProps) {
 
   return (
     <div
-      className={`
-        fixed
-        top-0
-        left-0
-
-        flex flex-col justify-between
-
-        w-64
-        h-full
-
-        border-r
-        border-[var(--surface)]
-
-        bg-[var(--background)]
-
-        p-4
-
-        transition-transform
-        duration-300
-
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-
-        md:translate-x-0
-        md:static
-      `}
+      className={`fixed top-0 left-0 flex flex-col justify-between w-64 h-full border-r border-[var(--surface)] bg-[var(--background)] p-4 transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static`}
     >
       <div className="flex flex-col gap-1.5">
         <div className="flex justify-end ml-4 mt-4 mb-8 md:hidden">

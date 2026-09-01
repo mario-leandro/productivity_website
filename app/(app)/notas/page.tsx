@@ -17,8 +17,12 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import { useState } from "react";
+import Modal from "@/src/components/ui/Modal";
 
 export default function Notas() {
+  const [ modalPasta, setModalPasta ] = useState(false);
+  const [ nomePasta, setNomePasta ] = useState("");
+
   const [editar, setEditar] = useState(false);
   const [conteudo, setConteudo] = useState(
     `# Bem-vindo ao Aura Productivity!\n\nO Aura é o seu novo ecossistema integrado para foco, agilidade e clareza mental. Reunimos as suas três ferramentas fundamentais em uma interface unificada e fluida:\n\n## 1. Calendário Inteligente\n* Visualize o seu dia, semana e mês sem sair de contexto.\n* Controle conflitos de horário com notificações instantâneas de sobreposição de eventos.\n* Arraste compromissos para mudar o dia e horário dinamicamente.\n\n## 2. Gerenciador de Tarefas Poderoso\n* Divida atividades complexas em sub-tarefas (Checklist).\n* Atribua **Prioridade Máxima**, datas de entrega e anexe documentos úteis.\n* Alterne entre as visualizações em **Lista**, **Kanban**, **Calendário** e **Timeline**.\n\n## 3. Notas em Markdown (Notion-style)\n* Organize em pastas inteligentes como '💼Trabalho', '🎓'Estudos' ou '🏠Pessoal'.\n* Escreva rascunhos limpos, relatórios de reunião e fixe no topo os de acesso constante.\n* Utilize templates prontos para reuniões, brainstormings e registros pessoais.\n\n*Dica de Produtividade: Mantenha seu dashboard limpo focando no widget "Resumo do Dia". Um dia produtivo começa com um plano simples!*`,
@@ -79,10 +83,28 @@ export default function Notas() {
               <div className="flex flex-row justify-between items-center mb-3">
                 <p className="text-sm uppercase font-semibold">Pastas</p>
 
-                <button className="text-[var(--text-secundary)] hover:text-[var(--primary)]">
+                <button onClick={() => setModalPasta(true)} className="text-[var(--text-secundary)] hover:text-[var(--primary)]">
                   <FolderPlus size={16} />
                 </button>
               </div>
+
+              <Modal isOpen={modalPasta} onClose={() => setModalPasta(false)}>
+                <div className="flex flex-col gap-4">
+                  <input
+                    type="text"
+                    placeholder="Nome da pasta"
+                    className="w-full p-2 border border-(--surface-four) rounded-lg focus:outline-none focus:ring-2 focus:ring-(--primary)"
+                    value={nomePasta}
+                    onChange={(e) => setNomePasta(e.target.value)}
+                  />
+                  <button className="bg-(--primary) text-white p-2 rounded-lg hover:bg-(--primary)/80 transition-colors">
+                    Criar Pasta
+                  </button>
+                  <button className="bg-(--surface-four) text-[var(--text)] p-2 rounded-lg hover:bg-(--surface-four)/80 transition-colors" onClick={() => setModalPasta(false)}>
+                    Fechar Modal
+                  </button>
+                </div>
+              </Modal>
 
               <div className="flex flex-col gap-1">
                 <button className="flex flex-row items-center text-sm text-[var(--text)] gap-2 p-2 rounded-lg">
