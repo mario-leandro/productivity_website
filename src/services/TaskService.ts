@@ -1,7 +1,7 @@
 import { sendRequest } from "@/src/lib/api";
 import { Task, CreateTaskData, TaskStatus } from "@/src/types/task";
 
-export const taskService = {
+export const TaskService = {
   list: async () => {
     return await sendRequest<Task[]>("/tasks");
   },

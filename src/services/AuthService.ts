@@ -1,7 +1,7 @@
 import { sendRequest } from "@/src/lib/api";
 import { LoginData, RegisterData, AuthResponse, User } from "@/src/types/auth";
 
-export const authService = {
+export const AuthService = {
   login: (data: LoginData) =>
     sendRequest<AuthResponse>("/auth/login", {
       method: "POST",
@@ -14,8 +14,6 @@ export const authService = {
       data,
     }),
 
-  me: (token: string) =>
-    sendRequest<User>("/auth/me", {
-      token,
-    }),
+  me: () =>
+    sendRequest<User>("/auth/me"),
 };

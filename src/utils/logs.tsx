@@ -3,7 +3,7 @@ import * as path from "path";
 
 class Logger {
   private logDir: string = path.join(__dirname, "logs");
-  private logFile: string = path.join(this.logDir, "log.txt");
+  private logFile: string = path.join(this.logDir, `log_${new Date().toISOString().replace(/[:.]/g, "-")}.txt`);
 
   constructor() {
     if (!fs.existsSync(this.logDir)) {
@@ -29,7 +29,4 @@ class Logger {
   }
 }
 
-// Como usar:
-// const logger = new Logger();
-// logger.info("O sistema foi iniciado.");
-// logger.error("Falha ao conectar com o banco de dados.");
+export const logger = new Logger();

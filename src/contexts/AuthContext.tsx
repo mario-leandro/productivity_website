@@ -1,14 +1,14 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { sendRequest } from "../lib/api";
-import { User } from "../types/auth";
+import { User, RegisterData, LoginData, AuthResponse } from "../types/auth";
+import { AuthService } from "../services/AuthService";
 
 type AuthContextType = {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  login: (data: LoginData) => Promise<void>;
+  register: (data: RegisterData) => Promise<void>;
   logout: () => void;
 };
 
@@ -19,7 +19,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   async function getMe(): Promise<User> {
-    return await sendRequest<User>("/auth/me");
+    return await AuthService.me();
   }
 
   async function loadUser() {
@@ -46,15 +46,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loadUser();
   }, []);
 
-  async function login(email: string, password: string) {
-    const response = await sendRequest("/auth/login", {
-      method: "POST",
-      data: { email, password },
-    });
+  async function login(data: LoginData) {
+    const response: AuthResponse = await AuthService.login(data);
 
     if (!response.success) {
       throw new Error(
-        response.message || response.error || "Erro ao fazer login",
+        response.error || response.message || "Falha ao fazer login. Por favor, tente novamente."
       );
     }
 
@@ -71,11 +68,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(usuario);
   }
 
-  async function register(name: string, email: string, password: string) {
-    await sendRequest("/auth/register", {
-      method: "POST",
-      data: { name, email, password },
-    });
+  async function register(data: RegisterData) {
+    await AuthService.register(data);
   }
 
   function logout() {

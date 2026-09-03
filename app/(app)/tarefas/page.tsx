@@ -19,21 +19,21 @@ import {
   Trash,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { taskService } from "@/src/services/TaskService";
+import { TaskService } from "@/src/services/TaskService";
 import { Task } from "@/src/types/task";
 
 export default function Tarefas() {
   const [activeTab, setActiveTab] = useState("Lista");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("Média");
   const [dueDate, setDueDate] = useState("");
 
   const handleCreateTask = async () => {
-    await taskService.create({
+    await TaskService.create({
       title,
       description,
       priority,
@@ -49,7 +49,7 @@ export default function Tarefas() {
 
   async function loadTasks() {
     try {
-      const response = await taskService.list();
+      const response = await TaskService.list();
       setTasks(response);
     } catch (error) {
       console.error(error);

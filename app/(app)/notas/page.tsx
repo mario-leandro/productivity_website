@@ -1,32 +1,60 @@
 "use client";
-import { Card, CardContent, CardHeader } from "@/src/components/ui/Card";
+import { Card } from "@/src/components/ui/Card";
 import {
   BriefcaseBusiness,
   Folder,
   FolderPlus,
   House,
-  Pencil,
   Pin,
   Plus,
   Search,
   Sparkles,
-  Star,
-  Trash,
+  Star
 } from "lucide-react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
 import { useState } from "react";
 import Modal from "@/src/components/ui/Modal";
+import { NoteService } from "@/src/services/NoteService";
+import { CreateNoteData, Note } from "@/src/types/note";
+import { MarkdownRender } from "@/src/components/MarkdownRender";
 
 export default function Notas() {
   const [ modalPasta, setModalPasta ] = useState(false);
   const [ nomePasta, setNomePasta ] = useState("");
+  const [ navegacao, setNavegacao ] = useState("Todas as notas");
+  const [ notas, setNotas ] = useState<Note[]>([]);
+  const [ editar, setEditar ] = useState(false);
+  const [ conteudo, setConteudo ] = useState("");
+  const [ title, setTitle ] = useState("");
+  const [ content, setContent ] = useState("");
+  const [ folderId, setFolderId ] = useState<number | undefined>(undefined);
+  const [ isFavorite, setIsFavorite ] = useState(false);
+  const [ isPinned, setIsPinned ] = useState(false);
 
-  const [editar, setEditar] = useState(false);
-  const [conteudo, setConteudo] = useState(
-    `# Bem-vindo ao Aura Productivity!\n\nO Aura é o seu novo ecossistema integrado para foco, agilidade e clareza mental. Reunimos as suas três ferramentas fundamentais em uma interface unificada e fluida:\n\n## 1. Calendário Inteligente\n* Visualize o seu dia, semana e mês sem sair de contexto.\n* Controle conflitos de horário com notificações instantâneas de sobreposição de eventos.\n* Arraste compromissos para mudar o dia e horário dinamicamente.\n\n## 2. Gerenciador de Tarefas Poderoso\n* Divida atividades complexas em sub-tarefas (Checklist).\n* Atribua **Prioridade Máxima**, datas de entrega e anexe documentos úteis.\n* Alterne entre as visualizações em **Lista**, **Kanban**, **Calendário** e **Timeline**.\n\n## 3. Notas em Markdown (Notion-style)\n* Organize em pastas inteligentes como '💼Trabalho', '🎓'Estudos' ou '🏠Pessoal'.\n* Escreva rascunhos limpos, relatórios de reunião e fixe no topo os de acesso constante.\n* Utilize templates prontos para reuniões, brainstormings e registros pessoais.\n\n*Dica de Produtividade: Mantenha seu dashboard limpo focando no widget "Resumo do Dia". Um dia produtivo começa com um plano simples!*`,
-  );
+  const loadNotes = async () => {
+    try {
+      const response = await NoteService.list();
+      console.log("Notas:", response);
+      setNotas(response);
+    } catch (error) {
+      console.error("Erro ao buscar notas:", error);
+    }
+  }
+
+  const createNote = async () => {
+    try {
+      const response = await NoteService.create({
+        title,
+        content,
+        folder_id: folderId,
+        is_favorite: isFavorite,
+        is_pinned: isPinned,
+      } as CreateNoteData);
+      console.log("Nota criada:", response);
+      setNotas([...notas, response]);
+    } catch (error) {
+      console.error("Erro ao criar nota:", error);
+    }
+  };
 
   return (
     <div className="flex flex-col p-6 gap-4 ">
@@ -63,14 +91,20 @@ export default function Notas() {
               </div>
 
               <div className="flex flex-col gap-1">
-                <button className="flex flex-row items-center bg-(--primary)/20 gap-2 p-2 rounded-lg">
+                <button 
+                  className={`flex flex-row items-center ${navegacao === "Todas as notas" ? "bg-(--primary)/20" : ""} gap-2 p-2 rounded-lg`}
+                  onClick={() => setNavegacao("Todas as notas")}
+                >
                   <Folder className="text-[var(--primary)]" size={16} />
                   <span className="text-sm text-[var(--text)]">
                     Todas as notas
                   </span>
                 </button>
 
-                <button className="flex flex-row items-center gap-2 p-2 rounded-lg">
+                <button 
+                  className={`flex flex-row items-center ${navegacao === "Favoritas" ? "bg-(--primary)/20" : ""} gap-2 p-2 rounded-lg`}
+                  onClick={() => setNavegacao("Favoritas")}
+                >
                   <Star className="text-yellow-300" size={16} />
                   <span className="text-sm text-[var(--text)]">Favoritas</span>
                 </button>
@@ -164,106 +198,7 @@ export default function Notas() {
 
         {/* div das notas */}
         <div className="md:w-3/4">
-          <Card className="p-6">
-            <CardHeader className="flex flex-row justify-between items-center">
-              <h2 className="text-xl font-bold">Manual de uso do Syncro</h2>
-
-              <div className="flex flex-row items-center gap-2">
-                <button className="p-2 rounded-lg border border-(--surface-four) hover:bg-(--surface-three) transition-colors">
-                  <Star size={16} />
-                </button>
-
-                <button className="p-2 rounded-lg border border-(--surface-four) hover:bg-(--surface-three) transition-colors">
-                  <Pin size={16} />
-                </button>
-
-                <button
-                  className="flex flex-row items-center text-xs gap-1 px-3 py-2 rounded-lg bg-(--primary) hover:bg-(--primary)/60 transition-colors"
-                  onClick={() => setEditar(!editar)}
-                >
-                  <Pencil size={16} />
-                  {editar ? "Salvar" : "Editar"}
-                </button>
-
-                <button className="p-2 rounded-lg border border-(--surface-four) hover:bg-(--surface-three) transition-colors">
-                  <Trash className="text-red-400" size={16} />
-                </button>
-              </div>
-            </CardHeader>
-
-            <hr className="text-(--surface-four) my-5" />
-
-            <CardContent>
-              {/* preview aqui */}
-              <div className="mt-6 text-[var(--text)] text-base leading-relaxed">
-                {editar ? (
-                  <div className="bg-(--surface-three) border border-(--surface-four) rounded-xl flex flex-col gap-2 mt-6">
-                    <textarea
-                      className="w-full h-[500px] rounded-xl p-3 text-[var(--text)] text-base leading-relaxed focus:outline-none resize-none"
-                      value={conteudo}
-                      onChange={(e) => setConteudo(e.target.value)}
-                    />
-                  </div>
-                ) : (
-                  <div className="bg-(--surface-three) border border-(--surface-four) rounded-xl p-3">
-                    <ReactMarkdown
-                      components={{
-                        h1: ({ children }) => (
-                          <h1 className="text-xl font-bold mb-6 text-[var(--text)]">
-                            {children}
-                          </h1>
-                        ),
-                        h2: ({ children }) => (
-                          <h2 className="text-lg font-semibold mt-8 mb-3 text-[var(--primary)]">
-                            {children}
-                          </h2>
-                        ),
-                        h3: ({ children }) => (
-                          <h3 className="text-base font-semibold mt-6 mb-2">
-                            {children}
-                          </h3>
-                        ),
-                        p: ({ children }) => (
-                          <p className="text-xs leading-6 mb-4 text-[var(--text-secundary)]">
-                            {children}
-                          </p>
-                        ),
-                        ul: ({ children }) => (
-                          <ul className="list-disc ml-6 space-y-2 mb-4">
-                            {children}
-                          </ul>
-                        ),
-                        ol: ({ children }) => (
-                          <ol className="list-decimal ml-6 space-y-2 mb-4">
-                            {children}
-                          </ol>
-                        ),
-                        li: ({ children }) => (
-                          <li className="text-[var(--text-secundary)] text-xs">
-                            {children}
-                          </li>
-                        ),
-                        strong: ({ children }) => (
-                          <strong className="text-[var(--text)] font-bold">
-                            {children}
-                          </strong>
-                        ),
-                        blockquote: ({ children }) => (
-                          <blockquote className="border-l-4 border-[var(--primary)] pl-4 italic my-4">
-                            {children}
-                          </blockquote>
-                        ),
-                      }}
-                      remarkPlugins={[remarkGfm]}
-                      rehypePlugins={[rehypeHighlight]}
-                    >
-                      {conteudo}
-                    </ReactMarkdown>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+          {/* <MarkdownRender /> */}
         </div>
       </div>
     </div>

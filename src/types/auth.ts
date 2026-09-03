@@ -7,10 +7,21 @@ export interface RegisterData {
   name: string;
   email: string;
   password: string;
+  success: boolean;
+  message?: string;
+  error?: string;
 }
 
 export interface AuthResponse {
   token: string;
+  success: boolean;
+  message?: string;
+  error?: string;
+  user?: User;
+  data?: {
+    token?: string;
+    user?: User;
+  };
 }
 
 export type User = {
