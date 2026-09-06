@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/contexts/AuthContext";
 import Alerta from "@/src/components/ui/Alert";
 import Link from "next/link";
+import { RegisterData } from "@/src/types/auth";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -20,8 +21,7 @@ export default function RegisterPage() {
     message: string;
   } | null>(null);
 
-  const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleRegister = async () => {
     setSubmitting(true);
     try {
       if (password !== confirmPassword) {
@@ -32,7 +32,7 @@ export default function RegisterPage() {
         return;
       }
 
-      await register(name, email, password);
+      await register({ name, email, password } as RegisterData);
 
       setAlerta({
         success: true,
@@ -66,7 +66,10 @@ export default function RegisterPage() {
       )}
 
       <form
-        onSubmit={handleRegister}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleRegister();
+        }}
         className="w-full flex flex-col items-start justify-start gap-4"
       >
         <div className="w-full flex flex-col gap-1">
@@ -117,7 +120,7 @@ export default function RegisterPage() {
       <div className="w-full flex items-center justify-center">
         <p>
           Já tem conta?{" "}
-          <Link href="/register" className="text-[var(--primary)]">
+          <Link href="/login" className="text-[var(--primary)]">
             Faça login
           </Link>
         </p>

@@ -7,7 +7,7 @@ export interface RegisterData {
   name: string;
   email: string;
   password: string;
-  success: boolean;
+  success?: boolean;
   message?: string;
   error?: string;
 }

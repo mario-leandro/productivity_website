@@ -22,7 +22,7 @@ export default function LoginPage() {
     event.preventDefault();
     setSubmitting(true);
     try {
-      await login(email, password);
+      await login({ email, password });
 
       setAlerta({
         success: true,
