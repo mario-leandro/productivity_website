@@ -5,6 +5,7 @@ export interface Note {
     folder_id?: number;
     is_favorite?: boolean;
     is_pinned?: boolean;
+    data: Object;
 }
 
 export interface CreateNoteData {

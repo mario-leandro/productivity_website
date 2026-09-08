@@ -49,6 +49,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function login(data: LoginData) {
     const response: AuthResponse = await AuthService.login(data);
 
+    console.log("Login response:", response);
+
     if (!response.success) {
       throw new Error(
         response.error || response.message || "Falha ao fazer login. Por favor, tente novamente."

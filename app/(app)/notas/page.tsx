@@ -11,30 +11,30 @@ import {
   Sparkles,
   Star
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "@/src/components/ui/Modal";
 import { NoteService } from "@/src/services/NoteService";
 import { CreateNoteData, Note } from "@/src/types/note";
 import { MarkdownRender } from "@/src/components/MarkdownRender";
 
 export default function Notas() {
-  const [ modalPasta, setModalPasta ] = useState(false);
-  const [ nomePasta, setNomePasta ] = useState("");
-  const [ navegacao, setNavegacao ] = useState("Todas as notas");
-  const [ notas, setNotas ] = useState<Note[]>([]);
-  const [ editar, setEditar ] = useState(false);
-  const [ conteudo, setConteudo ] = useState("");
-  const [ title, setTitle ] = useState("");
-  const [ content, setContent ] = useState("");
-  const [ folderId, setFolderId ] = useState<number | undefined>(undefined);
-  const [ isFavorite, setIsFavorite ] = useState(false);
-  const [ isPinned, setIsPinned ] = useState(false);
+  const [modalPasta, setModalPasta] = useState(false);
+  const [nomePasta, setNomePasta] = useState("");
+  const [navegacao, setNavegacao] = useState("Todas as notas");
+  const [notas, setNotas] = useState<Note[]>([]);
+  const [editar, setEditar] = useState(false);
+  const [conteudo, setConteudo] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [folderId, setFolderId] = useState<number | undefined>(undefined);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isPinned, setIsPinned] = useState(false);
+  const [selectedNote, setSelectedNote] = useState<Note | null>(null);
 
   const loadNotes = async () => {
     try {
       const response = await NoteService.list();
-      console.log("Notas:", response);
-      setNotas(response);
+      setNotas(response.data);
     } catch (error) {
       console.error("Erro ao buscar notas:", error);
     }
@@ -50,11 +50,15 @@ export default function Notas() {
         is_pinned: isPinned,
       } as CreateNoteData);
       console.log("Nota criada:", response);
-      setNotas([...notas, response]);
+      setNotas([...notas, response.data]);
     } catch (error) {
       console.error("Erro ao criar nota:", error);
     }
   };
+
+  useEffect(() => {
+    loadNotes();
+  }, []);
 
   return (
     <div className="flex flex-col p-6 gap-4 ">
@@ -81,6 +85,19 @@ export default function Notas() {
         </div>
       </div>
 
+      <div className="w-full bg-(--surface) rounded-2xl p-3">
+        <div className="flex flex-row items-center bg-(--surface-three) border border-(--surface-four) gap-2 p-2 rounded-2xl">
+          <Search className="text-[var(--text-secundary)]" size={16} />
+          <input
+            type="text"
+            name="search"
+            className="w-full text-xs text-[var(--text)] focus:outline-none placeholder-[var(--text-secundary)]"
+            placeholder="Buscar nota ou termo..."
+          />
+        </div>
+      </div>
+
+
       <div className="flex flex-col md:flex-row gap-4">
         {/* div das categorias */}
         <div className="md:w-1/4 flex flex-col gap-4">
@@ -91,7 +108,7 @@ export default function Notas() {
               </div>
 
               <div className="flex flex-col gap-1">
-                <button 
+                <button
                   className={`flex flex-row items-center ${navegacao === "Todas as notas" ? "bg-(--primary)/20" : ""} gap-2 p-2 rounded-lg`}
                   onClick={() => setNavegacao("Todas as notas")}
                 >
@@ -101,7 +118,7 @@ export default function Notas() {
                   </span>
                 </button>
 
-                <button 
+                <button
                   className={`flex flex-row items-center ${navegacao === "Favoritas" ? "bg-(--primary)/20" : ""} gap-2 p-2 rounded-lg`}
                   onClick={() => setNavegacao("Favoritas")}
                 >
@@ -154,51 +171,95 @@ export default function Notas() {
             </div>
           </Card>
 
-          <Card>
+          {/* <Card>
             <div className="flex flex-col gap-4">
-              <div className="flex flex-row items-center bg-(--surface-three) border border-(--surface-four) gap-2 p-2 rounded-2xl">
-                <Search className="text-[var(--text-secundary)]" size={16} />
-                <input
-                  type="text"
-                  name="search"
-                  className="w-full text-xs text-[var(--text)] focus:outline-none placeholder-[var(--text-secundary)]"
-                  placeholder="Buscar nota ou termo..."
-                />
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <div className="flex flex-col bg-(--surface-three) border border-(--surface-four) rounded-xl p-3 gap-2">
+              {notas.length > 0 ? notas.map((nota) => (
+                <div
+                  key={nota.id}
+                  onClick={() => setSelectedNote(nota)}
+                  className="flex flex-col bg-(--surface-three) hover:bg-(--surface-two)
+               duration-100 border border-(--surface-four)
+               rounded-xl p-3 gap-2 cursor-pointer"
+                >
                   <div className="flex flex-row justify-between items-center">
                     <p className="text-sm font-semibold">
-                      Manual de uso do Syncro
+                      {nota.title}
                     </p>
 
                     <div className="flex flex-row items-center gap-2">
-                      <Pin className="text-yellow-400" size={16} />
-                      <Star className="text-yellow-400" size={16} />
+                      {nota.is_pinned && (
+                        <Pin className="text-yellow-400" size={16} />
+                      )}
+
+                      {nota.is_favorite && (
+                        <Star className="text-yellow-400" size={16} />
+                      )}
                     </div>
                   </div>
 
                   <div>
                     <p className="text-xs text-(--text-secundary)">
-                      Descrição do projeto Syncro...
+                      {nota.content.substring(0, 100)}...
                     </p>
                   </div>
 
                   <div className="flex flex-row justify-end items-center">
                     <p className="text-[10px] text-(--text-secundary)">
-                      23/07/2026
+                      {nota.created_at}
                     </p>
                   </div>
                 </div>
-              </div>
+              )) : (
+                <p className="text-sm text-(--text-secundary) text-center">Nenhuma Nota Localizada</p>
+              )}
             </div>
-          </Card>
+          </Card> */}
         </div>
 
         {/* div das notas */}
         <div className="md:w-3/4">
-          {/* <MarkdownRender /> */}
+          {selectedNote ? (
+            <MarkdownRender
+              note={selectedNote}
+              onBack={() => setSelectedNote(null)}
+            />
+          ) : (
+            <Card>
+              <div className="flex flex-col gap-4">
+                {notas.map((nota) => (
+                  <div
+                    key={nota.id}
+                    onClick={() => setSelectedNote(nota)}
+                    className="flex flex-col bg-(--surface-three)
+                       hover:bg-(--surface-two)
+                       duration-100
+                       border border-(--surface-four)
+                       rounded-xl p-3 gap-2 cursor-pointer"
+                  >
+                    <div className="flex flex-row justify-between items-center">
+                      <p className="text-sm font-semibold">
+                        {nota.title}
+                      </p>
+
+                      <div className="flex flex-row items-center gap-2">
+                        {nota.is_pinned && (
+                          <Pin className="text-yellow-400" size={16} />
+                        )}
+
+                        {nota.is_favorite && (
+                          <Star className="text-yellow-400" size={16} />
+                        )}
+                      </div>
+                    </div>
+
+                    <p className="text-xs text-(--text-secundary)">
+                      {nota.content.substring(0, 120)}...
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
         </div>
       </div>
     </div>
