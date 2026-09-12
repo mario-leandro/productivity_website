@@ -16,12 +16,14 @@ import Modal from "@/src/components/ui/Modal";
 import { NoteService } from "@/src/services/NoteService";
 import { CreateNoteData, Note } from "@/src/types/note";
 import { MarkdownRender } from "@/src/components/MarkdownRender";
+import { NoteFoldersService } from "@/src/services/NoteFolders";
 
 export default function Notas() {
   const [modalPasta, setModalPasta] = useState(false);
   const [nomePasta, setNomePasta] = useState("");
   const [navegacao, setNavegacao] = useState("Todas as notas");
   const [notas, setNotas] = useState<Note[]>([]);
+  const [pastas, setPastas] = useState<{ id: number; name: string }[]>([]);
   const [editar, setEditar] = useState(false);
   const [conteudo, setConteudo] = useState("");
   const [title, setTitle] = useState("");
@@ -40,6 +42,15 @@ export default function Notas() {
     }
   }
 
+  const loadFolders = async () => {
+    try {
+      const response = await NoteFoldersService.listFolders();
+      setPastas(response.data); // Assuming you have a state for folders
+    } catch (error) {
+      console.error("Erro ao buscar pastas:", error);
+    }
+  };
+
   const createNote = async () => {
     try {
       const response = await NoteService.create({
@@ -56,8 +67,19 @@ export default function Notas() {
     }
   };
 
+  const createFolder = async (name: string) => {
+    try {
+      const response = await NoteFoldersService.createFolder({ name });
+      console.log("Pasta criada:", response);
+      // Update your folders state here if you have one
+    } catch (error) {
+      console.error("Erro ao criar pasta:", error);
+    }
+  };
+
   useEffect(() => {
     loadNotes();
+    loadFolders();
   }, []);
 
   return (
@@ -158,62 +180,15 @@ export default function Notas() {
               </Modal>
 
               <div className="flex flex-col gap-1">
-                <button className="flex flex-row items-center text-sm text-[var(--text)] gap-2 p-2 rounded-lg">
-                  <BriefcaseBusiness size={16} />
-                  Trabalho
-                </button>
-
-                <button className="flex flex-row items-center text-sm text-[var(--text)] gap-2 p-2 rounded-lg">
-                  <House size={16} />
-                  Pessoal
-                </button>
+                { pastas && pastas.length > 0 ? pastas.map((pasta) => (
+                  <button key={pasta.id} className="flex flex-row items-center text-sm text-[var(--text)] gap-2 p-2 rounded-lg">
+                    <BriefcaseBusiness size={16} />
+                    {pasta.name}
+                  </button>
+                )) : (<p className="text-sm text-[var(--text-secundary)]">Nenhuma pasta encontrada</p>) }
               </div>
             </div>
           </Card>
-
-          {/* <Card>
-            <div className="flex flex-col gap-4">
-              {notas.length > 0 ? notas.map((nota) => (
-                <div
-                  key={nota.id}
-                  onClick={() => setSelectedNote(nota)}
-                  className="flex flex-col bg-(--surface-three) hover:bg-(--surface-two)
-               duration-100 border border-(--surface-four)
-               rounded-xl p-3 gap-2 cursor-pointer"
-                >
-                  <div className="flex flex-row justify-between items-center">
-                    <p className="text-sm font-semibold">
-                      {nota.title}
-                    </p>
-
-                    <div className="flex flex-row items-center gap-2">
-                      {nota.is_pinned && (
-                        <Pin className="text-yellow-400" size={16} />
-                      )}
-
-                      {nota.is_favorite && (
-                        <Star className="text-yellow-400" size={16} />
-                      )}
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="text-xs text-(--text-secundary)">
-                      {nota.content.substring(0, 100)}...
-                    </p>
-                  </div>
-
-                  <div className="flex flex-row justify-end items-center">
-                    <p className="text-[10px] text-(--text-secundary)">
-                      {nota.created_at}
-                    </p>
-                  </div>
-                </div>
-              )) : (
-                <p className="text-sm text-(--text-secundary) text-center">Nenhuma Nota Localizada</p>
-              )}
-            </div>
-          </Card> */}
         </div>
 
         {/* div das notas */}
@@ -242,13 +217,23 @@ export default function Notas() {
                       </p>
 
                       <div className="flex flex-row items-center gap-2">
-                        {nota.is_pinned && (
-                          <Pin className="text-yellow-400" size={16} />
-                        )}
+                        <Pin
+                          size={16}
+                          className={
+                            nota.is_pinned
+                              ? "text-yellow-400"
+                              : "text-(--text-secundary)"
+                          }
+                        />
 
-                        {nota.is_favorite && (
-                          <Star className="text-yellow-400" size={16} />
-                        )}
+                        <Star
+                          size={16}
+                          className={
+                            nota.is_favorite
+                              ? "text-yellow-400"
+                              : "text-(--text-secundary)"
+                          }
+                        />
                       </div>
                     </div>
 
