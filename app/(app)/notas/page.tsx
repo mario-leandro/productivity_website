@@ -32,6 +32,7 @@ export default function Notas() {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
+  const [pasta, setPasta] = useState<{ id: number; name: string } | null>(null);
 
   const loadNotes = async () => {
     try {
@@ -70,8 +71,8 @@ export default function Notas() {
   const createFolder = async (name: string) => {
     try {
       const response = await NoteFoldersService.createFolder({ name });
-      console.log("Pasta criada:", response);
-      // Update your folders state here if you have one
+      setPasta(response.data);
+      setPastas([...pastas, response.data]);
     } catch (error) {
       console.error("Erro ao criar pasta:", error);
     }
@@ -161,35 +162,45 @@ export default function Notas() {
                 </button>
               </div>
 
-              <Modal isOpen={modalPasta} onClose={() => setModalPasta(false)}>
-                <div className="flex flex-col gap-4">
-                  <input
-                    type="text"
-                    placeholder="Nome da pasta"
-                    className="w-full p-2 border border-(--surface-four) rounded-lg focus:outline-none focus:ring-2 focus:ring-(--primary)"
-                    value={nomePasta}
-                    onChange={(e) => setNomePasta(e.target.value)}
-                  />
-                  <button className="bg-(--primary) text-white p-2 rounded-lg hover:bg-(--primary)/80 transition-colors">
-                    Criar Pasta
-                  </button>
-                  <button className="bg-(--surface-four) text-[var(--text)] p-2 rounded-lg hover:bg-(--surface-four)/80 transition-colors" onClick={() => setModalPasta(false)}>
-                    Fechar Modal
-                  </button>
-                </div>
-              </Modal>
-
               <div className="flex flex-col gap-1">
-                { pastas && pastas.length > 0 ? pastas.map((pasta) => (
-                  <button key={pasta.id} className="flex flex-row items-center text-sm text-[var(--text)] gap-2 p-2 rounded-lg">
-                    <BriefcaseBusiness size={16} />
+                {pastas && pastas.length > 0 ? pastas.map((pasta) => (
+                  <button
+                    key={pasta.id}
+                    className={`flex flex-row items-center text-sm text-[var(--text)] ${navegacao === pasta.name ? "bg-(--primary)/20" : ""} gap-2 p-2 rounded-lg`}
+                    onClick={() => setNavegacao(pasta.name)}
+                  >
+                    <Folder size={16} />
                     {pasta.name}
                   </button>
-                )) : (<p className="text-sm text-[var(--text-secundary)]">Nenhuma pasta encontrada</p>) }
+                )) : (<p className="text-sm text-[var(--text-secundary)]">Nenhuma pasta encontrada</p>)}
               </div>
             </div>
           </Card>
         </div>
+
+        <Modal isOpen={modalPasta} onClose={() => setModalPasta(false)}>
+          <div className="flex flex-col gap-4">
+            <input
+              type="text"
+              placeholder="Nome da pasta"
+              className="w-full p-2 border border-(--surface-four) rounded-lg focus:outline-none focus:ring-2 focus:ring-(--primary)"
+              value={nomePasta}
+              onChange={(e) => setNomePasta(e.target.value)}
+            />
+            <button
+              className="bg-(--primary) text-white p-2 rounded-lg hover:bg-(--primary)/80 transition-colors"
+              onClick={() => {
+                setPastas([...pastas, { id: Date.now(), name: nomePasta }]);
+                setModalPasta(false);
+              }}
+            >
+              Criar Pasta
+            </button>
+            <button className="bg-(--surface-four) text-[var(--text)] p-2 rounded-lg hover:bg-(--surface-four)/80 transition-colors" onClick={() => setModalPasta(false)}>
+              Fechar Modal
+            </button>
+          </div>
+        </Modal>
 
         {/* div das notas */}
         <div className="md:w-3/4">
