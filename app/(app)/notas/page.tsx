@@ -14,8 +14,8 @@ import {
 import { useEffect, useState } from "react";
 import Modal from "@/src/components/ui/Modal";
 import { NoteService } from "@/src/services/NoteService";
-import { CreateNoteData, Note } from "@/src/types/note";
-import { MarkdownRender } from "@/src/components/MarkdownRender";
+import { CreateNoteData, Note, UpdateNoteData } from "@/src/types/note";
+import { NoteRender } from "@/src/components/NoteRender";
 import { NoteFoldersService } from "@/src/services/NoteFolders";
 
 export default function Notas() {
@@ -75,6 +75,31 @@ export default function Notas() {
       setPastas([...pastas, response.data]);
     } catch (error) {
       console.error("Erro ao criar pasta:", error);
+    }
+  };
+
+  const updateNote = async (
+    id: number,
+    data: Partial<UpdateNoteData>
+  ) => {
+    try {
+      await NoteService.update(id, data);
+
+      setNotas((prevNotas) =>
+        prevNotas.map((note) =>
+          note.id === id
+            ? { ...note, ...data }
+            : note
+        )
+      );
+
+      setSelectedNote((prev) =>
+        prev?.id === id
+          ? { ...prev, ...data }
+          : prev
+      );
+    } catch (error) {
+      console.error("Erro ao atualizar nota:", error);
     }
   };
 
@@ -189,10 +214,7 @@ export default function Notas() {
             />
             <button
               className="bg-(--primary) text-white p-2 rounded-lg hover:bg-(--primary)/80 transition-colors"
-              onClick={() => {
-                setPastas([...pastas, { id: Date.now(), name: nomePasta }]);
-                setModalPasta(false);
-              }}
+              onClick={createFolder}
             >
               Criar Pasta
             </button>
@@ -205,9 +227,10 @@ export default function Notas() {
         {/* div das notas */}
         <div className="md:w-3/4">
           {selectedNote ? (
-            <MarkdownRender
+            <NoteRender
               note={selectedNote}
               onBack={() => setSelectedNote(null)}
+              onUpdate={updateNote}
             />
           ) : (
             <Card>
