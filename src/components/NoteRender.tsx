@@ -15,12 +15,12 @@ import {
 } from "./ui/Card";
 
 import { useState } from "react";
-import { Note } from "@/src/types/note";
+import { Note, UpdateNoteData } from "@/src/types/note";
 
 type Props = {
   note: Note;
   onBack: () => void;
-  onUpdate: (id: number, data: Partial<Note>) => void;
+  onUpdate: (id: number, data: Partial<UpdateNoteData>) => void;
 };
 
 export function NoteRender({
@@ -28,9 +28,12 @@ export function NoteRender({
   onBack,
   onUpdate,
 }: Props) {
+  const userId = localStorage.getItem("user");
   const [editar, setEditar] = useState(false);
   const [conteudo, setConteudo] = useState(note.content);
   const [titulo, setTitulo] = useState(note.title);
+  const [favorito, setFavorito] = useState(note.is_favorite ?? false);
+  const [fixado, setFixado] = useState(note.is_pinned ?? false);
 
   return (
     <Card className="p-6">
@@ -57,19 +60,26 @@ export function NoteRender({
         </div>
 
         <div className="flex flex-row items-center gap-2">
-          <button className="p-2 rounded-lg border border-(--surface-four)">
-            <Star size={16} />
+          <button 
+            className={`p-2 rounded-lg border border-(--surface-four)`}
+            onClick={() => setFavorito(!favorito)}
+
+          >
+            <Star size={16} color={favorito ? "yellow" : "currentColor"} />
           </button>
 
-          <button className="p-2 rounded-lg border border-(--surface-four)">
-            <Pin size={16} />
+          <button 
+            className={`p-2 rounded-lg border border-(--surface-four)`}
+            onClick={() => setFixado(!fixado)}
+          >
+            <Pin size={16} color={fixado ? "yellow" : "currentColor"} />
           </button>
 
           <button
             className="flex items-center text-xs gap-1 px-3 py-2 rounded-lg bg-(--primary)"
             onClick={() => {
               if (editar) {
-                onUpdate(note.id, { title: titulo, content: conteudo });
+                onUpdate(note.id, { title: titulo, content: conteudo, is_favorite: favorito, is_pinned: fixado });
               }
               setEditar(!editar);
             }}

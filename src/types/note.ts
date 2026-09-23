@@ -17,6 +17,7 @@ export interface CreateNoteData {
 }
 
 export interface UpdateNoteData {
+    user_id: number;
     title?: string;
     content?: string;
     folder_id?: number;
