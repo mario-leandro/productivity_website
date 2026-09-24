@@ -25,8 +25,8 @@ export async function sendRequest<T = any>(
     json = null;
   }
 
-  if (!json?.success) {
-    console.error("Request failed:", json?.message || "Unknown error");
+  if (!json) {
+    throw new Error(json?.message || json?.message || "Unknown error");
   }
 
   return json as T;
