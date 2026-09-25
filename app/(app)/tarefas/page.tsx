@@ -354,7 +354,6 @@ Ler documentação`}
           task={selectedTask}
           onClose={() => setSelectedTask(null)}
           isOpen={true}
-          setIsOpen={() => setSelectedTask(null)}
         >
           <div className="w-full flex flex-row justify-between items-center">
             <div>
@@ -520,7 +519,6 @@ function TaskComponentKanban({
       {tasks.map((task) => (
         <div
           className="h-100 w-100 bg-[var(--surface)] border-t-4 border-blue-500 rounded-2xl"
-          onClick={() => onSelect(task)}
           key={task.id}
         >
           <div className="flex flex-row items-center justify-between p-4">
@@ -532,7 +530,10 @@ function TaskComponentKanban({
               1
             </span>
           </div>
-          <div className="flex flex-col gap-4 px-4">
+          <div
+            className="flex flex-col gap-4 px-4"
+            onClick={() => onSelect(task)}
+          >
             {tasks
               .filter((task) => task.status === "A Fazer")
               .map((task) => (
