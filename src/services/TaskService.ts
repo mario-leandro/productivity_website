@@ -1,5 +1,5 @@
 import { sendRequest } from "@/src/lib/api";
-import { Task, CreateTaskData, TaskStatus } from "@/src/types/task";
+import { Task, CreateTaskData, TaskStatus, UpdateTaskStatusData } from "@/src/types/task";
 
 export const TaskService = {
   list: async () => {
@@ -12,9 +12,9 @@ export const TaskService = {
       data,
     }),
 
-  updateStatus: async (id: number, status: TaskStatus, position: number) =>
+  updateStatus: async (id: number,data: UpdateTaskStatusData) =>
     await sendRequest(`/tasks/status`, {
       method: "PATCH",
-      data: { id, status, position },
+      data: { id, ...data },
     }),
 };

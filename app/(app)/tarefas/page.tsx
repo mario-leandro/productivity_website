@@ -81,6 +81,25 @@ export default function Tarefas() {
     },
   ];
 
+  const handleStatusChange = async (
+    taskId: number,
+    newStatus: string
+  ) => {
+    try {
+      await TaskService.updateStatus(taskId, newStatus);
+
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === taskId
+            ? { ...task, status: newStatus }
+            : task
+        )
+      );
+    } catch (error) {
+      console.error("Erro ao atualizar status:", error);
+    }
+  };
+
   const isActive = "bg-violet-500/30 text-[var(--text)]";
 
   return (
@@ -177,13 +196,15 @@ export default function Tarefas() {
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
               >
+                <option value="" disabled hidden defaultChecked>
+                  Selecione a prioridade
+                </option>
                 <option value="Alta" className="bg-(--surface-three)">
                   Alta
                 </option>
                 <option
                   value="Média"
                   className="bg-(--surface-three)"
-                  defaultChecked
                 >
                   Média
                 </option>
@@ -208,75 +229,6 @@ export default function Tarefas() {
                 onChange={(e) => setDueDate(e.target.value)}
               />
             </div>
-
-            {/* <div className="flex flex-col gap-2">
-              <label
-                htmlFor="category"
-                className="text-xs text-(--text-secundary) font-semibold"
-              >
-                Categoria
-              </label>
-              <select
-                className="w-full p-2 rounded-xl text-xs bg-[var(--surface-three)]"
-                name="category"
-                id="category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                <option value="work" className="bg-(--surface-three)">
-                  Trabalho
-                </option>
-                <option
-                  value="personal"
-                  className="bg-(--surface-three)"
-                  defaultChecked
-                >
-                  Pessoal
-                </option>
-                <option value="study" className="bg-(--surface-three)">
-                  Estudo
-                </option>
-              </select>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label
-                htmlFor="tags"
-                className="text-xs text-(--text-secundary) font-semibold"
-              >
-                Tags (separadas por vírgula)
-              </label>
-              <input
-                type="text"
-                id="tags"
-                className="w-full p-2 rounded-xl text-xs bg-[var(--surface-three)]"
-                placeholder="Ex: Trabalho, Pessoal, Estudo"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="checklist"
-              className="text-xs text-(--text-secundary) font-semibold"
-            >
-              Checklist (uma sub-tarefa por linha)
-            </label>
-            <div className="flex flex-row gap-2">
-              <textarea
-                name="checklist"
-                id="checklist"
-                className="w-full min-h-20 p-2 rounded-xl text-xs bg-[var(--surface-three)] resize-y"
-                placeholder={`Estudar algoritmos
-Revisar React
-Ler documentação`}
-                value={checklist}
-                onChange={(e) => setChecklist(e.target.value)}
-              ></textarea>
-            </div>
-          </div> */}
           </div>
 
           <div className="flex flex-row justify-end items-center gap-2">
@@ -314,16 +266,16 @@ Ler documentação`}
         {/* filtro de prioridade */}
         <div className="w-1/6 flex flex-col bg-[var(--surface-three)] border border-[var(--surface-four)] rounded-xl">
           <select className="outline-none text-xs rounded-xl p-2">
-            <option className="bg-[var(--surface-three)]" value="all">
+            <option className="bg-[var(--surface-three)]" value="Todas">
               Todas as prioridades
             </option>
-            <option className="bg-[var(--surface-three)]" value="high">
+            <option className="bg-[var(--surface-three)]" value="Alta">
               Alta
             </option>
-            <option className="bg-[var(--surface-three)]" value="medium">
+            <option className="bg-[var(--surface-three)]" value="Média">
               Média
             </option>
-            <option className="bg-[var(--surface-three)]" value="low">
+            <option className="bg-[var(--surface-three)]" value="Baixa">
               Baixa
             </option>
           </select>
@@ -332,16 +284,16 @@ Ler documentação`}
         {/* filtro de categoria */}
         <div className="w-1/6 flex flex-col bg-[var(--surface-three)] border border-[var(--surface-four)] rounded-xl">
           <select className="outline-none text-xs rounded-xl p-2">
-            <option className="bg-[var(--surface-three)]" value="all">
+            <option className="bg-[var(--surface-three)]" value="Todas">
               Todas as categorias
             </option>
-            <option className="bg-[var(--surface-three)]" value="work">
+            <option className="bg-[var(--surface-three)]" value="Trabalho">
               Trabalho
             </option>
-            <option className="bg-[var(--surface-three)]" value="personal">
+            <option className="bg-[var(--surface-three)]" value="Pessoal">
               Pessoal
             </option>
-            <option className="bg-[var(--surface-three)]" value="study">
+            <option className="bg-[var(--surface-three)]" value="Estudo">
               Estudo
             </option>
           </select>
@@ -401,7 +353,7 @@ Ler documentação`}
 
       {
         tasks.length > 0 ?
-          renderTasksView(activeTab, tasks, setSelectedTask)
+          renderTasksView(activeTab, tasks, setSelectedTask, handleStatusChange)
           :
           (
             <div className="flex flex-col items-center justify-center">
@@ -414,7 +366,15 @@ Ler documentação`}
   );
 }
 
-function renderTasksView(activeTab: string, tasks: Task[], setSelectedTask: (task: Task) => void) {
+function renderTasksView(
+  activeTab: string,
+  tasks: Task[],
+  setSelectedTask: (task: Task) => void,
+  handleStatusChange: (
+    taskId: number,
+    newStatus: string
+  ) => Promise<void>
+) {
   switch (activeTab) {
     case "Lista":
       return (
@@ -423,13 +383,16 @@ function renderTasksView(activeTab: string, tasks: Task[], setSelectedTask: (tas
           onSelect={setSelectedTask}
         />
       );
+
     case "Kanban":
       return (
         <TaskComponentKanban
           tasks={tasks}
           onSelect={setSelectedTask}
+          onStatusChange={handleStatusChange}
         />
       );
+
     case "Timeline":
       return (
         <TaskComponentTimeline
@@ -437,6 +400,7 @@ function renderTasksView(activeTab: string, tasks: Task[], setSelectedTask: (tas
           onSelect={setSelectedTask}
         />
       );
+
     default:
       return null;
   }
@@ -510,37 +474,71 @@ function TaskComponentList({
 function TaskComponentKanban({
   tasks,
   onSelect,
+  onStatusChange
 }: {
   tasks: Task[];
   onSelect: (task: Task) => void;
+  onStatusChange: (
+    taskId: number,
+    newStatus: string
+  ) => Promise<void>;
 }) {
+  const kanbanColumns = [
+    {
+      title: "A Fazer",
+      status: "A Fazer",
+      icon: <Calendar size={16} />,
+      border: "border-blue-500",
+    },
+    {
+      title: "Executando",
+      status: "Executando",
+      icon: <Rocket size={16} />,
+      border: "border-yellow-500",
+    },
+    {
+      title: "Concluído",
+      status: "Concluído",
+      icon: <CheckCircle size={16} />,
+      border: "border-green-500",
+    },
+  ];
+
+  const nextStatus: Record<string, string | null> = {
+    "A Fazer": "Executando",
+    "Executando": "Concluído",
+    "Concluído": null,
+  };
+
   return (
     <div className="flex flex-row gap-4">
-      {tasks.map((task) => (
-        <div
-          className="h-100 w-100 bg-[var(--surface)] border-t-4 border-blue-500 rounded-2xl"
-          key={task.id}
-        >
-          <div className="flex flex-row items-center justify-between p-4">
-            <p className="flex flex-row items-center text-xs text-[var(--text)] font-semibold gap-2">
-              {task.status}
-              <Calendar size={16} />
-            </p>
-            <span className="text-xs text-[var(--text-secundary)] bg-[var(--surface-three)] w-6 h-6 flex flex-row items-center justify-center rounded-full">
-              1
-            </span>
-          </div>
+      {kanbanColumns.map((column) => {
+        const columnTasks = tasks.filter(
+          (task) => task.status === column.status
+        );
+
+        return (
           <div
-            className="flex flex-col gap-4 px-4"
-            onClick={() => onSelect(task)}
+            key={column.status}
+            className={`min-h-100 w-100 bg-[var(--surface)] border-t-4 ${column.border} rounded-2xl pb-4`}
           >
-            {tasks
-              .filter((task) => task.status === "A Fazer")
-              .map((task) => (
+            <div className="flex flex-row items-center justify-between p-4">
+              <p className="flex flex-row items-center text-xs text-[var(--text)] font-semibold gap-2">
+                {column.title}
+                {column.icon}
+              </p>
+
+              <span className="text-xs text-[var(--text-secundary)] bg-[var(--surface-three)] w-6 h-6 flex items-center justify-center rounded-full">
+                {columnTasks.length}
+              </span>
+            </div>
+
+            <div className="flex flex-col gap-4 px-4">
+              {columnTasks.map((task) => (
                 <div
-                  className="flex flex-col justify-between bg-[var(--surface-three)] border border-[var(--surface-four)] rounded-2xl"
                   key={task.id}
                   onClick={() => onSelect(task)}
+                  className="flex flex-col justify-between bg-[var(--surface-three)] border border-[var(--surface-four)] rounded-2xl cursor-pointer"
                 >
                   <div className="flex flex-col gap-2 p-3">
                     <div className="flex flex-row justify-between items-center">
@@ -548,17 +546,27 @@ function TaskComponentKanban({
                         {task.priority}
                       </span>
 
-                      <div className="flex flex-row">
-                        <button className="flex flex-row items-center justify-center cursor-pointer">
+                      {nextStatus[task.status] && (
+                        <button
+                          onClick={(event) => {
+                            event.stopPropagation();
+
+                            const newStatus = nextStatus[task.status];
+
+                            if (newStatus) {
+                              onStatusChange(task.id, newStatus);
+                            }
+                          }}
+                        >
                           <ChevronRight size={16} />
                         </button>
-                      </div>
+                      )}
                     </div>
-
-                    <div className="flex flex-col justify-center items-start">
+                    <div className="flex flex-row gap-1">
                       <p className="text-sm text-[var(--text)] font-semibold">
                         {task.title}
                       </p>
+
                       <p className="text-xs text-[var(--text-secundary)]">
                         {task.description}
                       </p>
@@ -566,64 +574,21 @@ function TaskComponentKanban({
 
                     <hr className="border-[var(--surface-four)]" />
 
-                    <div className="flex flex-row justify-between items-center">
-                      {/* <div className="flex flex-row items-center justify-center gap-1 px-1">
-                      <p className="text-xs text-[var(--text-secundary)]">
-                        Estudos
-                      </p>
-                    </div> */}
+                    <p className="text-xs text-[var(--text-secundary)]">
+                      {task.due_date}
+                    </p>
 
-                      <div className="flex flex-row items-center justify-center gap-1 p-1 rounded-sm">
-                        <p className="text-xs text-[var(--text-secundary)]">
-                          {task.due_date}
-                        </p>
-                      </div>
-                    </div>
                   </div>
                 </div>
               ))}
+            </div>
           </div>
-        </div>
-      ))}
-      <div className="h-100 w-100 bg-[var(--surface)] border-t-4 border-yellow-500 rounded-2xl">
-        <div className="flex flex-row items-center justify-between p-4">
-          <p className="flex flex-row items-center text-xs text-[var(--text)] font-semibold gap-2">
-            Executando
-            <Rocket size={16} />
-          </p>
-          <span className="text-xs text-[var(--text-secundary)] bg-[var(--surface-three)] w-6 h-6 flex flex-row items-center justify-center rounded-full">
-            0
-          </span>
-        </div>
-        <div className="flex flex-col gap-4 px-4"></div>
-      </div>
-      {/* <div className="h-100 w-100 bg-[var(--surface)] border-t-4 border-purple-500 rounded-2xl">
-        <div className="flex flex-row items-center justify-between p-4">
-          <p className="flex flex-row items-center text-xs text-[var(--text)] font-semibold gap-2">
-            Revisão
-            <Pencil size={16} />
-          </p>
-          <span className="text-xs text-[var(--text-secundary)] bg-[var(--surface-three)] w-6 h-6 flex flex-row items-center justify-center rounded-full">
-            0
-          </span>
-        </div>
-        <div className="flex flex-col gap-4 px-4"></div>
-      </div> */}
-      <div className="h-100 w-100 bg-[var(--surface)] border-t-4 border-green-500 rounded-2xl">
-        <div className="flex flex-row items-center justify-between p-4">
-          <p className="flex flex-row items-center text-xs text-[var(--text)] font-semibold gap-2">
-            Concluído
-            <CheckCircle size={16} />
-          </p>
-          <span className="text-xs text-[var(--text-secundary)] bg-[var(--surface-three)] w-6 h-6 flex flex-row items-center justify-center rounded-full">
-            0
-          </span>
-        </div>
-        <div className="flex flex-col gap-4 px-4"></div>
-      </div>
+        );
+      })}
     </div>
   );
 }
+
 
 function TaskComponentTimeline({
   tasks,

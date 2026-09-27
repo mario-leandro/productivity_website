@@ -1,6 +1,6 @@
-export type TaskStatus = "todo" | "in_progress" | "done";
+export type TaskStatus = "A Fazer" | "Executando" | "Concluído";
 
-export type TaskPriority = "low" | "medium" | "high";
+export type TaskPriority = "Baixo" | "Médio" | "Alto";
 
 export interface Task {
   id: number;
@@ -20,4 +20,10 @@ export interface CreateTaskData {
   description?: string;
   priority?: TaskPriority;
   due_date?: string;
+}
+
+export interface UpdateTaskStatusData {
+  id: number;
+  status: TaskStatus;
+  position: number;
 }
