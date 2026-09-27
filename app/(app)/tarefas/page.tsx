@@ -562,7 +562,7 @@ function TaskComponentKanban({
                         </button>
                       )}
                     </div>
-                    <div className="flex flex-row gap-1">
+                    <div className="flex flex-col gap-1">
                       <p className="text-sm text-[var(--text)] font-semibold">
                         {task.title}
                       </p>
