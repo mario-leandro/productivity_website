@@ -15,6 +15,6 @@ export const TaskService = {
   updateStatus: async (id: number,data: UpdateTaskStatusData) =>
     await sendRequest(`/tasks/status`, {
       method: "PATCH",
-      data: { id, ...data },
+      data: { id, data },
     }),
 };

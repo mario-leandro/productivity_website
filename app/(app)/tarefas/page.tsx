@@ -548,6 +548,7 @@ function TaskComponentKanban({
 
                       {nextStatus[task.status] && (
                         <button
+                          className="p-1 rounded-full hover:bg-[var(--surface-four)] duration-150"
                           onClick={(event) => {
                             event.stopPropagation();
 
@@ -577,7 +578,6 @@ function TaskComponentKanban({
                     <p className="text-xs text-[var(--text-secundary)]">
                       {task.due_date}
                     </p>
-
                   </div>
                 </div>
               ))}
