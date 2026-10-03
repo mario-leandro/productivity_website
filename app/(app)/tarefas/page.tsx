@@ -487,18 +487,21 @@ function TaskComponentKanban({
     {
       title: "A Fazer",
       status: "A Fazer",
+      position: 0,
       icon: <Calendar size={16} />,
       border: "border-blue-500",
     },
     {
       title: "Executando",
       status: "Executando",
+      position: 1,
       icon: <Rocket size={16} />,
       border: "border-yellow-500",
     },
     {
       title: "Concluído",
       status: "Concluído",
+      position: 2,
       icon: <CheckCircle size={16} />,
       border: "border-green-500",
     },

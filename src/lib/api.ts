@@ -21,9 +21,12 @@ export async function sendRequest<T = any>(
 
   try {
     json = await response.json();
+    console.log("Fetched JSON:", json);
   } catch {
     json = null;
   }
+
+  // console.log("Response JSON:", json);
 
   if (!json) {
     throw new Error(json?.message || json?.message || "Unknown error");

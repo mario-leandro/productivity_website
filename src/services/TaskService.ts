@@ -17,4 +17,9 @@ export const TaskService = {
       method: "PATCH",
       data: { id, data },
     }),
+
+  delete: async (id: number) =>
+    await sendRequest(`/tasks/${id}`, {
+      method: "DELETE",
+    }),
 };
